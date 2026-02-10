@@ -52,7 +52,7 @@ export class PoseEstimator {
           }
         );
 
-        console.log("✓ Pose detection model loaded (MoveNet SINGLEPOSE_THUNDER)");
+        // console.log("✓ Pose detection model loaded (MoveNet SINGLEPOSE_THUNDER)");
       } catch (error) {
         this.isInitializing = false;
         this.initPromise = null;

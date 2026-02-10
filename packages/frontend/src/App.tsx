@@ -139,8 +139,17 @@ function AppShell() {
   return (
     <div className="app-shell">
       <header>
-        <h1>DexStitch</h1>
-        <p>Local-first pattern and embroidery workstation</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <img 
+            src="/DexStitchLogo.png" 
+            alt="DexStitch Logo" 
+            style={{ height: '60px', width: 'auto' }}
+          />
+          <div>
+            <h1 style={{ margin: 0 }}>DexStitch</h1>
+            <p style={{ margin: 0 }}>Local-first pattern and embroidery workstation</p>
+          </div>
+        </div>
       </header>
       <main>
         <div className="panel">

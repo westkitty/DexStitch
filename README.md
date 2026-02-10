@@ -1,6 +1,14 @@
-# DexStitch Monorepo
+<div align="center">
+  <img src="DexStitchLogo.png" alt="DexStitch Logo" width="200"/>
+  <h1>DexStitch</h1>
+  <p><strong>Local-first parametric sewing pattern design & embroidery digitization</strong></p>
+</div>
 
-Monorepo scaffold for the DexStitch PWA. Packages:
+---
+
+## Monorepo Structure
+
+Packages:
 
 - `packages/types`: Shared domain types (MeasurementSet, PatternSpec, etc.)
 - `packages/frontend`: React + Vite app (PWA UI)

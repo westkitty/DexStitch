@@ -1,6 +1,7 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test } from 'vitest';
 import * as fc from 'fast-check';
-import { distance, Point2D, computeBoundingBox, type PatternPiece } from '../index';
+import { distance, computeBoundingBox } from '@dexstitch/types';
+import type { Point2D } from '@dexstitch/types';
 
 describe('Geometric Invariants (Property-Based Tests)', () => {
   // Helpers for generating valid floating point numbers

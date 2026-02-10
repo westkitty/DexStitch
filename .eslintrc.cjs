@@ -1,5 +1,6 @@
 module.exports = {
   root: true,
+  ignorePatterns: ["**/dist/**", "**/*.d.ts", "node_modules", "**/vitest.config.ts"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaVersion: "latest",

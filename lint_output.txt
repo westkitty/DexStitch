@@ -1,0 +1,225 @@
+
+> dexstitch@0.1.0 lint /Users/andrew/Projects/DexStitch
+> eslint "packages/**/*.{ts,tsx}" --max-warnings=0
+
+
+/Users/andrew/Projects/DexStitch/packages/core/dist/__tests__/pipeline.test.d.ts
+  0:0  error  Parsing error: ESLint was configured to run on `<tsconfigRootDir>/packages/core/dist/__tests__/pipeline.test.d.ts` using `parserOptions.project`: 
+- <tsconfigRootDir>/packages/core/tsconfig.json
+- <tsconfigRootDir>/packages/frontend/tsconfig.json
+- <tsconfigRootDir>/packages/types/tsconfig.json
+- <tsconfigRootDir>/packages/wasm-modules/tsconfig.json
+However, none of those TSConfigs include this file. Either:
+- Change ESLint's list of included files to not include this file
+- Change one of those TSConfigs to include this file
+- Create a new TSConfig that includes this file and include it in your parserOptions.project
+See the typescript-eslint docs for more info: https://typescript-eslint.io/troubleshooting/typed-linting#i-get-errors-telling-me-eslint-was-configured-to-run--however-that-tsconfig-does-not--none-of-those-tsconfigs-include-this-file
+
+/Users/andrew/Projects/DexStitch/packages/core/dist/embroideryEngine.d.ts
+  0:0  error  Parsing error: ESLint was configured to run on `<tsconfigRootDir>/packages/core/dist/embroideryEngine.d.ts` using `parserOptions.project`: 
+- <tsconfigRootDir>/packages/core/tsconfig.json
+- <tsconfigRootDir>/packages/frontend/tsconfig.json
+- <tsconfigRootDir>/packages/types/tsconfig.json
+- <tsconfigRootDir>/packages/wasm-modules/tsconfig.json
+However, none of those TSConfigs include this file. Either:
+- Change ESLint's list of included files to not include this file
+- Change one of those TSConfigs to include this file
+- Create a new TSConfig that includes this file and include it in your parserOptions.project
+See the typescript-eslint docs for more info: https://typescript-eslint.io/troubleshooting/typed-linting#i-get-errors-telling-me-eslint-was-configured-to-run--however-that-tsconfig-does-not--none-of-those-tsconfigs-include-this-file
+
+/Users/andrew/Projects/DexStitch/packages/core/dist/index.d.ts
+  0:0  error  Parsing error: ESLint was configured to run on `<tsconfigRootDir>/packages/core/dist/index.d.ts` using `parserOptions.project`: 
+- <tsconfigRootDir>/packages/core/tsconfig.json
+- <tsconfigRootDir>/packages/frontend/tsconfig.json
+- <tsconfigRootDir>/packages/types/tsconfig.json
+- <tsconfigRootDir>/packages/wasm-modules/tsconfig.json
+However, none of those TSConfigs include this file. Either:
+- Change ESLint's list of included files to not include this file
+- Change one of those TSConfigs to include this file
+- Create a new TSConfig that includes this file and include it in your parserOptions.project
+See the typescript-eslint docs for more info: https://typescript-eslint.io/troubleshooting/typed-linting#i-get-errors-telling-me-eslint-was-configured-to-run--however-that-tsconfig-does-not--none-of-those-tsconfigs-include-this-file
+
+/Users/andrew/Projects/DexStitch/packages/core/dist/nest.d.ts
+  0:0  error  Parsing error: ESLint was configured to run on `<tsconfigRootDir>/packages/core/dist/nest.d.ts` using `parserOptions.project`: 
+- <tsconfigRootDir>/packages/core/tsconfig.json
+- <tsconfigRootDir>/packages/frontend/tsconfig.json
+- <tsconfigRootDir>/packages/types/tsconfig.json
+- <tsconfigRootDir>/packages/wasm-modules/tsconfig.json
+However, none of those TSConfigs include this file. Either:
+- Change ESLint's list of included files to not include this file
+- Change one of those TSConfigs to include this file
+- Create a new TSConfig that includes this file and include it in your parserOptions.project
+See the typescript-eslint docs for more info: https://typescript-eslint.io/troubleshooting/typed-linting#i-get-errors-telling-me-eslint-was-configured-to-run--however-that-tsconfig-does-not--none-of-those-tsconfigs-include-this-file
+
+/Users/andrew/Projects/DexStitch/packages/core/dist/patternEngine.d.ts
+  0:0  error  Parsing error: ESLint was configured to run on `<tsconfigRootDir>/packages/core/dist/patternEngine.d.ts` using `parserOptions.project`: 
+- <tsconfigRootDir>/packages/core/tsconfig.json
+- <tsconfigRootDir>/packages/frontend/tsconfig.json
+- <tsconfigRootDir>/packages/types/tsconfig.json
+- <tsconfigRootDir>/packages/wasm-modules/tsconfig.json
+However, none of those TSConfigs include this file. Either:
+- Change ESLint's list of included files to not include this file
+- Change one of those TSConfigs to include this file
+- Create a new TSConfig that includes this file and include it in your parserOptions.project
+See the typescript-eslint docs for more info: https://typescript-eslint.io/troubleshooting/typed-linting#i-get-errors-telling-me-eslint-was-configured-to-run--however-that-tsconfig-does-not--none-of-those-tsconfigs-include-this-file
+
+/Users/andrew/Projects/DexStitch/packages/core/dist/preview.d.ts
+  0:0  error  Parsing error: ESLint was configured to run on `<tsconfigRootDir>/packages/core/dist/preview.d.ts` using `parserOptions.project`: 
+- <tsconfigRootDir>/packages/core/tsconfig.json
+- <tsconfigRootDir>/packages/frontend/tsconfig.json
+- <tsconfigRootDir>/packages/types/tsconfig.json
+- <tsconfigRootDir>/packages/wasm-modules/tsconfig.json
+However, none of those TSConfigs include this file. Either:
+- Change ESLint's list of included files to not include this file
+- Change one of those TSConfigs to include this file
+- Create a new TSConfig that includes this file and include it in your parserOptions.project
+See the typescript-eslint docs for more info: https://typescript-eslint.io/troubleshooting/typed-linting#i-get-errors-telling-me-eslint-was-configured-to-run--however-that-tsconfig-does-not--none-of-those-tsconfigs-include-this-file
+
+/Users/andrew/Projects/DexStitch/packages/core/dist/types.d.ts
+  0:0  error  Parsing error: ESLint was configured to run on `<tsconfigRootDir>/packages/core/dist/types.d.ts` using `parserOptions.project`: 
+- <tsconfigRootDir>/packages/core/tsconfig.json
+- <tsconfigRootDir>/packages/frontend/tsconfig.json
+- <tsconfigRootDir>/packages/types/tsconfig.json
+- <tsconfigRootDir>/packages/wasm-modules/tsconfig.json
+However, none of those TSConfigs include this file. Either:
+- Change ESLint's list of included files to not include this file
+- Change one of those TSConfigs to include this file
+- Create a new TSConfig that includes this file and include it in your parserOptions.project
+See the typescript-eslint docs for more info: https://typescript-eslint.io/troubleshooting/typed-linting#i-get-errors-telling-me-eslint-was-configured-to-run--however-that-tsconfig-does-not--none-of-those-tsconfigs-include-this-file
+
+/Users/andrew/Projects/DexStitch/packages/core/src/__tests__/exports.test.ts
+  6:3  error  'exportToDST' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/andrew/Projects/DexStitch/packages/core/src/__tests__/invariants.test.ts
+  1:26  error  'expect' is defined but never used        @typescript-eslint/no-unused-vars
+  3:1   error  Imports "Point2D" are only used as type   @typescript-eslint/consistent-type-imports
+  3:54  error  'PatternPiece' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/andrew/Projects/DexStitch/packages/core/src/bodyScanner.ts
+   69:9  error  'L_ANKLE' is assigned a value but never used        @typescript-eslint/no-unused-vars
+   71:9  error  'L_EAR' is assigned a value but never used          @typescript-eslint/no-unused-vars
+   72:9  error  'R_EAR' is assigned a value but never used          @typescript-eslint/no-unused-vars
+   73:9  error  'L_WRIST' is assigned a value but never used        @typescript-eslint/no-unused-vars
+   74:9  error  'R_WRIST' is assigned a value but never used        @typescript-eslint/no-unused-vars
+   75:9  error  'L_KNEE' is assigned a value but never used         @typescript-eslint/no-unused-vars
+   76:9  error  'R_KNEE' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  112:9  error  'shoulderToHip' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/andrew/Projects/DexStitch/packages/core/src/export.ts
+  124:31  error  Unexpected any. Specify a different type                             @typescript-eslint/no-explicit-any
+  207:35  error  'i' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  282:9   error  'svgContent' is assigned a value but never used                      @typescript-eslint/no-unused-vars
+  289:9   error  'contentWidth' is assigned a value but never used                    @typescript-eslint/no-unused-vars
+  290:9   error  'contentHeight' is assigned a value but never used                   @typescript-eslint/no-unused-vars
+
+/Users/andrew/Projects/DexStitch/packages/core/src/nest.ts
+    2:30  error  'transformPoint' is defined but never used        @typescript-eslint/no-unused-vars
+   21:9   error  'binHeight' is assigned a value but never used    @typescript-eslint/no-unused-vars
+   54:13  error  'bbox' is assigned a value but never used         @typescript-eslint/no-unused-vars
+   86:11  error  'bbox' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  144:9   error  'pieceHeight' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/andrew/Projects/DexStitch/packages/core/src/plugins.ts
+  189:20  error  'measurements' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  189:34  error  'spec' is defined but never used. Allowed unused args must match /^_/u          @typescript-eslint/no-unused-vars
+
+/Users/andrew/Projects/DexStitch/packages/core/vitest.config.ts
+  0:0  error  Parsing error: ESLint was configured to run on `<tsconfigRootDir>/packages/core/vitest.config.ts` using `parserOptions.project`: 
+- <tsconfigRootDir>/packages/core/tsconfig.json
+- <tsconfigRootDir>/packages/frontend/tsconfig.json
+- <tsconfigRootDir>/packages/types/tsconfig.json
+- <tsconfigRootDir>/packages/wasm-modules/tsconfig.json
+However, none of those TSConfigs include this file. Either:
+- Change ESLint's list of included files to not include this file
+- Change one of those TSConfigs to include this file
+- Create a new TSConfig that includes this file and include it in your parserOptions.project
+See the typescript-eslint docs for more info: https://typescript-eslint.io/troubleshooting/typed-linting#i-get-errors-telling-me-eslint-was-configured-to-run--however-that-tsconfig-does-not--none-of-those-tsconfigs-include-this-file
+
+/Users/andrew/Projects/DexStitch/packages/frontend/src/collaboration.ts
+   12:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  132:57  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/andrew/Projects/DexStitch/packages/frontend/src/db.ts
+  1:1  error  Imports "Table" are only used as type  @typescript-eslint/consistent-type-imports
+
+/Users/andrew/Projects/DexStitch/packages/frontend/src/views/MeasurementsView.tsx
+   2:40  error  'smoothMeasurements' is defined but never used                                                                                                                      @typescript-eslint/no-unused-vars
+   2:65  error  'PoseLandmark' is defined but never used                                                                                                                            @typescript-eslint/no-unused-vars
+  38:5   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+
+/Users/andrew/Projects/DexStitch/packages/frontend/vite.config.ts
+  0:0  error  Parsing error: ESLint was configured to run on `<tsconfigRootDir>/packages/frontend/vite.config.ts` using `parserOptions.project`: 
+- <tsconfigRootDir>/packages/core/tsconfig.json
+- <tsconfigRootDir>/packages/frontend/tsconfig.json
+- <tsconfigRootDir>/packages/types/tsconfig.json
+- <tsconfigRootDir>/packages/wasm-modules/tsconfig.json
+However, none of those TSConfigs include this file. Either:
+- Change ESLint's list of included files to not include this file
+- Change one of those TSConfigs to include this file
+- Create a new TSConfig that includes this file and include it in your parserOptions.project
+See the typescript-eslint docs for more info: https://typescript-eslint.io/troubleshooting/typed-linting#i-get-errors-telling-me-eslint-was-configured-to-run--however-that-tsconfig-does-not--none-of-those-tsconfigs-include-this-file
+
+/Users/andrew/Projects/DexStitch/packages/types/dist/__tests__/types.test.d.ts
+  0:0  error  Parsing error: ESLint was configured to run on `<tsconfigRootDir>/packages/types/dist/__tests__/types.test.d.ts` using `parserOptions.project`: 
+- <tsconfigRootDir>/packages/core/tsconfig.json
+- <tsconfigRootDir>/packages/frontend/tsconfig.json
+- <tsconfigRootDir>/packages/types/tsconfig.json
+- <tsconfigRootDir>/packages/wasm-modules/tsconfig.json
+However, none of those TSConfigs include this file. Either:
+- Change ESLint's list of included files to not include this file
+- Change one of those TSConfigs to include this file
+- Create a new TSConfig that includes this file and include it in your parserOptions.project
+See the typescript-eslint docs for more info: https://typescript-eslint.io/troubleshooting/typed-linting#i-get-errors-telling-me-eslint-was-configured-to-run--however-that-tsconfig-does-not--none-of-those-tsconfigs-include-this-file
+
+/Users/andrew/Projects/DexStitch/packages/types/dist/geometry.d.ts
+  0:0  error  Parsing error: ESLint was configured to run on `<tsconfigRootDir>/packages/types/dist/geometry.d.ts` using `parserOptions.project`: 
+- <tsconfigRootDir>/packages/core/tsconfig.json
+- <tsconfigRootDir>/packages/frontend/tsconfig.json
+- <tsconfigRootDir>/packages/types/tsconfig.json
+- <tsconfigRootDir>/packages/wasm-modules/tsconfig.json
+However, none of those TSConfigs include this file. Either:
+- Change ESLint's list of included files to not include this file
+- Change one of those TSConfigs to include this file
+- Create a new TSConfig that includes this file and include it in your parserOptions.project
+See the typescript-eslint docs for more info: https://typescript-eslint.io/troubleshooting/typed-linting#i-get-errors-telling-me-eslint-was-configured-to-run--however-that-tsconfig-does-not--none-of-those-tsconfigs-include-this-file
+
+/Users/andrew/Projects/DexStitch/packages/types/dist/index.d.ts
+  0:0  error  Parsing error: ESLint was configured to run on `<tsconfigRootDir>/packages/types/dist/index.d.ts` using `parserOptions.project`: 
+- <tsconfigRootDir>/packages/core/tsconfig.json
+- <tsconfigRootDir>/packages/frontend/tsconfig.json
+- <tsconfigRootDir>/packages/types/tsconfig.json
+- <tsconfigRootDir>/packages/wasm-modules/tsconfig.json
+However, none of those TSConfigs include this file. Either:
+- Change ESLint's list of included files to not include this file
+- Change one of those TSConfigs to include this file
+- Create a new TSConfig that includes this file and include it in your parserOptions.project
+See the typescript-eslint docs for more info: https://typescript-eslint.io/troubleshooting/typed-linting#i-get-errors-telling-me-eslint-was-configured-to-run--however-that-tsconfig-does-not--none-of-those-tsconfigs-include-this-file
+
+/Users/andrew/Projects/DexStitch/packages/types/vitest.config.ts
+  0:0  error  Parsing error: ESLint was configured to run on `<tsconfigRootDir>/packages/types/vitest.config.ts` using `parserOptions.project`: 
+- <tsconfigRootDir>/packages/core/tsconfig.json
+- <tsconfigRootDir>/packages/frontend/tsconfig.json
+- <tsconfigRootDir>/packages/types/tsconfig.json
+- <tsconfigRootDir>/packages/wasm-modules/tsconfig.json
+However, none of those TSConfigs include this file. Either:
+- Change ESLint's list of included files to not include this file
+- Change one of those TSConfigs to include this file
+- Create a new TSConfig that includes this file and include it in your parserOptions.project
+See the typescript-eslint docs for more info: https://typescript-eslint.io/troubleshooting/typed-linting#i-get-errors-telling-me-eslint-was-configured-to-run--however-that-tsconfig-does-not--none-of-those-tsconfigs-include-this-file
+
+/Users/andrew/Projects/DexStitch/packages/wasm-modules/dist/index.d.ts
+  0:0  error  Parsing error: ESLint was configured to run on `<tsconfigRootDir>/packages/wasm-modules/dist/index.d.ts` using `parserOptions.project`: 
+- <tsconfigRootDir>/packages/core/tsconfig.json
+- <tsconfigRootDir>/packages/frontend/tsconfig.json
+- <tsconfigRootDir>/packages/types/tsconfig.json
+- <tsconfigRootDir>/packages/wasm-modules/tsconfig.json
+However, none of those TSConfigs include this file. Either:
+- Change ESLint's list of included files to not include this file
+- Change one of those TSConfigs to include this file
+- Create a new TSConfig that includes this file and include it in your parserOptions.project
+See the typescript-eslint docs for more info: https://typescript-eslint.io/troubleshooting/typed-linting#i-get-errors-telling-me-eslint-was-configured-to-run--however-that-tsconfig-does-not--none-of-those-tsconfigs-include-this-file
+
+✖ 44 problems (44 errors, 0 warnings)
+  2 errors and 0 warnings potentially fixable with the `--fix` option.
+
+ ELIFECYCLE  Command failed with exit code 1.

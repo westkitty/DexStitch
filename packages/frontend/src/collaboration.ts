@@ -9,7 +9,7 @@ import type { ProjectData } from "./state";
 export class CollaborationManager {
   private doc: Y.Doc;
   private provider: WebrtcProvider | null = null;
-  private yProject: Y.Map<any> | null = null;
+  private yProject: Y.Map<string> | null = null;
   private statusCallback: ((status: CollabStatus) => void) | null = null;
 
   constructor(private roomName: string = "dexstitch-collab") {
@@ -63,7 +63,7 @@ export class CollaborationManager {
       if (project.nesting) {
         this.yProject!.set('nesting', JSON.stringify(project.nesting));
       }
-      this.yProject!.set('timestamp', Date.now());
+      this.yProject!.set('timestamp', Date.now().toString());
     });
   }
 
@@ -89,7 +89,7 @@ export class CollaborationManager {
    * Subscribe to project changes from peers
    */
   onProjectChange(callback: (project: Partial<ProjectData>) => void): () => void {
-    if (!this.yProject) return () => {};
+    if (!this.yProject) return () => { };
 
     const observeCallback = () => {
       callback(this.getProjectFromY());
@@ -129,7 +129,7 @@ export class CollaborationManager {
     if (!this.provider) return [];
 
     const awareness = this.provider.awareness;
-    const states = awareness.getStates() as Map<number, any>;
+    const states = awareness.getStates() as Map<number, { user: { name: string; color: string }; cursor: { x: number; y: number } | undefined; activeView: string; lastUpdate: number }>;
 
     return Array.from(states.entries())
       .filter(([clientID]) => clientID !== awareness.clientID)
@@ -167,7 +167,7 @@ export class CollaborationManager {
    */
   getPeerCount(): number {
     if (!this.provider) return 0;
-    
+
     try {
       const awareness = this.provider.awareness;
       // Count unique peers from the awareness states

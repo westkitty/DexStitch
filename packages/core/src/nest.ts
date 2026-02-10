@@ -1,5 +1,5 @@
 import type { NestingInput, NestingOutput, Point2D } from "@dexstitch/types";
-import { computeBoundingBox, transformPoint } from "@dexstitch/types";
+import { computeBoundingBox } from "@dexstitch/types";
 
 interface PlacedPiece {
   pieceId: string;
@@ -18,7 +18,7 @@ interface PlacedPiece {
 export function nestPieces(input: NestingInput): NestingOutput {
   const { pieces, binWidth } = input;
   const padding = 10; // mm padding between pieces
-  const binHeight = 5000; // Max height (we'll use multiple rows if needed)
+  // const binHeight = 5000; // Max height (we'll use multiple rows if needed)
 
   if (pieces.length === 0) {
     return {
@@ -51,7 +51,7 @@ export function nestPieces(input: NestingInput): NestingOutput {
     for (const rotation of [0, 90, 180, 270]) {
       // Create a rotated copy of the piece outline
       const rotatedOutline = rotatePiece(piece.outline, rotation);
-      const bbox = computeBoundingBox(rotatedOutline);
+
 
       // Try to place at different positions
       const positions = generatePositionsToTry(placed, rotatedOutline, binWidth, padding);
@@ -83,7 +83,7 @@ export function nestPieces(input: NestingInput): NestingOutput {
 
   // Convert placements to output format
   const placements = placed.map((p) => {
-    const bbox = computeBoundingBox(p.outline);
+
     return {
       pieceId: p.pieceId,
       x: p.x,
@@ -141,7 +141,7 @@ function generatePositionsToTry(
   const positions: Array<{ x: number; y: number }> = [];
   const bbox = computeBoundingBox(outline);
   const pieceWidth = bbox.maxX - bbox.minX;
-  const pieceHeight = bbox.maxY - bbox.minY;
+
 
   // Try baseline (y=0, x along width)
   for (let x = 0; x < binWidth - pieceWidth; x += 50) {

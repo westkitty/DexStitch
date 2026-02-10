@@ -3,7 +3,6 @@ import {
   exportToSVG,
   exportToDXF,
   exportToJSON,
-  exportToDST,
   generatePattern,
   type PatternSpec
 } from '../index';
@@ -15,16 +14,17 @@ import type { MeasurementSet } from '@dexstitch/types';
 function createTestMeasurements(): MeasurementSet {
   return {
     height: 1700,
-    neckCircumference: 380,
-    chestCircumference: 950,
-    waistCircumference: 800,
-    hipCircumference: 900
+    neck: 380,
+    chest: 950,
+    waist: 800,
+    hip: 900
   };
 }
 
 function createTestSpec(): PatternSpec {
   return {
-    type: 'rectangular',
+    id: 'test-pattern',
+    name: 'Test Pattern',
     parameters: {
       ease: 1.05,
       dartDepth: 15
@@ -40,7 +40,7 @@ describe('Export Format Validation', () => {
   describe('SVG Export', () => {
     test('generates valid SVG XML', () => {
       const svg = exportToSVG(pattern);
-      
+
       expect(svg).toContain('<svg');
       expect(svg).toContain('</svg>');
       expect(svg).toContain('viewBox');
@@ -49,7 +49,7 @@ describe('Export Format Validation', () => {
 
     test('includes all pieces', () => {
       const svg = exportToSVG(pattern);
-      
+
       // Each piece should be represented as a path element
       const pathCount = (svg.match(/<path/g) || []).length;
       expect(pathCount).toBeGreaterThanOrEqual(pattern.pieces.length);
@@ -57,7 +57,7 @@ describe('Export Format Validation', () => {
 
     test('includes piece labels', () => {
       const svg = exportToSVG(pattern);
-      
+
       expect(svg).toContain('<text');
       expect(svg).toContain('Front Panel'); // Standard piece name
     });
@@ -66,7 +66,7 @@ describe('Export Format Validation', () => {
       const svg = exportToSVG(pattern);
       const parser = new DOMParser();
       const doc = parser.parseFromString(svg, 'image/svg+xml');
-      
+
       expect(doc.documentElement.tagName).toBe('svg');
       expect(doc.getElementsByTagNameNS('http://www.w3.org/2000/svg', 'svg').length).toBeGreaterThan(0);
     });
@@ -74,11 +74,11 @@ describe('Export Format Validation', () => {
     test('viewBox dimensions are reasonable', () => {
       const svg = exportToSVG(pattern);
       const viewBoxMatch = svg.match(/viewBox="([^"]+)"/);
-      
+
       expect(viewBoxMatch).toBeTruthy();
       const parts = viewBoxMatch![1].split(/\s+/);
       expect(parts.length).toBeGreaterThanOrEqual(4);
-      
+
       const width = Number(parts[2]);
       const height = Number(parts[3]);
       expect(width).toBeGreaterThan(0);
@@ -89,7 +89,7 @@ describe('Export Format Validation', () => {
   describe('DXF Export', () => {
     test('starts with DXF header section', () => {
       const dxf = exportToDXF(pattern);
-      
+
       expect(dxf).toContain('0');
       expect(dxf).toContain('SECTION');
       expect(dxf).toContain('HEADER');
@@ -97,26 +97,26 @@ describe('Export Format Validation', () => {
 
     test('includes entities section', () => {
       const dxf = exportToDXF(pattern);
-      
+
       expect(dxf).toContain('ENTITIES');
     });
 
     test('contains LWPOLYLINE elements', () => {
       const dxf = exportToDXF(pattern);
-      
+
       expect(dxf).toContain('LWPOLYLINE');
     });
 
     test('exports as string', () => {
       const dxf = exportToDXF(pattern);
-      
+
       expect(typeof dxf).toBe('string');
       expect(dxf.length).toBeGreaterThan(0);
     });
 
     test('includes end-of-file marker', () => {
       const dxf = exportToDXF(pattern);
-      
+
       expect(dxf).toContain('ENDSEC');
       expect(dxf).toContain('EOF');
     });

@@ -142,10 +142,10 @@ export class PluginRegistry {
       type === 'pattern'
         ? this.patternPlugins
         : type === 'export'
-        ? this.exportPlugins
-        : type === 'embroidery'
-        ? this.embroideryPlugins
-        : this.uiPlugins;
+          ? this.exportPlugins
+          : type === 'embroidery'
+            ? this.embroideryPlugins
+            : this.uiPlugins;
 
     return map.delete(id);
   }
@@ -186,7 +186,7 @@ export const taperSleevePlugin: PatternPlugin = {
   id: 'taper-sleeve',
   name: 'Taper Sleeve Modifier',
   version: '1.0.0',
-  generate: async (measurements, spec) => {
+  generate: async (_measurements, _spec) => {
     // This is a placeholder - actual implementation would modify sleeve taper
     return {
       pieces: [],

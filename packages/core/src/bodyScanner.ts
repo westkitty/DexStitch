@@ -66,14 +66,8 @@ export function estimateMeasurementsFromPose(
   const R_SHOULDER = 12;
   const L_HIP = 23;
   const R_HIP = 24;
-  const L_ANKLE = 27;
   const R_ANKLE = 28;
-  const L_EAR = 3;
-  const R_EAR = 4;
-  const L_WRIST = 15;
-  const R_WRIST = 16;
-  const L_KNEE = 25;
-  const R_KNEE = 26;
+
 
   // Skip if landmarks don't pass confidence threshold
   const validLandmarks = landmarks.filter(l => (l.visibility ?? 1) > fullConfig.minConfidence);
@@ -109,7 +103,8 @@ export function estimateMeasurementsFromPose(
   });
 
   // Estimate chest (shoulder to shin distance, use as proxy)
-  const shoulderToHip = distance(landmarks[R_SHOULDER], landmarks[R_HIP]) * pixelToMmScale;
+  // Estimate chest (shoulder to shin distance, use as proxy)
+
   const chestEstimate = distance(landmarks[L_SHOULDER], landmarks[R_SHOULDER]) * pixelToMmScale * 1.2; // Chest slightly wider
   measurements.push({
     name: 'chest',

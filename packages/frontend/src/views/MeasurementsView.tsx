@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { estimateMeasurementsFromPose, smoothMeasurements, type PoseLandmark } from "@dexstitch/core";
+import { estimateMeasurementsFromPose } from "@dexstitch/core";
 import { getPoseEstimator, disposePoseEstimator } from "../ml/poseEstimator";
 import CameraCapture from "../components/CameraCapture";
 import type { MeasurementSet, PatternSpec } from "@dexstitch/types";
@@ -35,7 +35,7 @@ export default function MeasurementsView({
       }
     };
 
-    initModel();
+    void initModel();
 
     // Cleanup on unmount
     return () => {
@@ -51,11 +51,11 @@ export default function MeasurementsView({
 
     try {
       setScanStatus("Analyzing pose...");
-      
+
       // Get real pose landmarks from ML model
       const estimator = getPoseEstimator();
       const landmarks = await estimator.estimatePose(imageData);
-      
+
       if (landmarks.length === 0) {
         setScanStatus("No pose detected - try better lighting or move closer");
         return;
@@ -152,7 +152,7 @@ export default function MeasurementsView({
               placeholder="Your actual height in mm"
             />
           </div>
-          <p className="status-pill" style={{ 
+          <p className="status-pill" style={{
             backgroundColor: modelReady ? '#90EE90' : '#FFD700',
             color: '#000'
           }}>
