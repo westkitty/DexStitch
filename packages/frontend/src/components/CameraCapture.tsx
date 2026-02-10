@@ -212,19 +212,42 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true }: 
     <div style={{ position: 'relative' }}>
       {error && (
         <div style={{
-          padding: '12px',
+          padding: '16px',
           marginBottom: '12px',
-          background: '#ff4444',
+          background: '#ff6b6b',
           color: 'white',
           borderRadius: '8px',
-          fontSize: '0.9em'
+          fontSize: '0.95em',
+          lineHeight: '1.6'
         }}>
-          <div>⚠️ {error}</div>
+          <div style={{ fontWeight: 'bold', marginBottom: '8px' }}>⚠️ {error}</div>
           {error.includes('HTTPS') && (
-            <div style={{ marginTop: '8px', fontSize: '0.85em' }}>
-              💡 Tip: Camera access requires a secure connection. Try accessing via:
-              <br/>• <code>https://localhost:5174/</code>
-              <br/>• or use the IP address (<code>http://10.0.0.126:5174/</code>) and allow insecure localhost in browser
+            <div style={{ 
+              marginTop: '12px', 
+              fontSize: '0.9em',
+              background: 'rgba(0,0,0,0.2)',
+              padding: '12px',
+              borderRadius: '6px'
+            }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '8px' }}>💡 How to fix:</div>
+              <div style={{ marginBottom: '6px' }}>
+                <strong>Option 1 (Easiest):</strong> Access from the same computer via:
+              </div>
+              <div style={{ 
+                background: 'rgba(0,0,0,0.3)', 
+                padding: '8px', 
+                borderRadius: '4px',
+                fontFamily: 'monospace',
+                marginBottom: '12px'
+              }}>
+                http://localhost:5174/
+              </div>
+              <div style={{ marginBottom: '6px' }}>
+                <strong>Option 2:</strong> Access from another device but accept the security warning for local development
+              </div>
+              <div style={{ fontSize: '0.85em', opacity: 0.9, marginTop: '8px' }}>
+                Note: Browsers require secure connections (HTTPS or localhost) for camera access. This is a security feature to protect users.
+              </div>
             </div>
           )}
         </div>
