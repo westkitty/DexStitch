@@ -19,6 +19,13 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true }: 
     }
     try {
       setError("");
+      
+      // Check if getUserMedia is available
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        setError("Camera API not available. Please use HTTPS or localhost, and ensure your browser supports camera access.");
+        return;
+      }
+      
       const nextStream = await navigator.mediaDevices.getUserMedia({
         video: { 
           facingMode: "user",
@@ -41,7 +48,16 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true }: 
       }
     } catch (err) {
       console.error("Camera error:", err);
-      setError(err instanceof Error ? err.message : "Failed to access camera. Please allow camera permissions.");
+      const errorMsg = err instanceof Error ? err.message : String(err);
+      if (errorMsg.includes('NotAllowedError') || errorMsg.includes('Permission')) {
+        setError("Camera permission denied. Please allow camera access in your browser settings.");
+      } else if (errorMsg.includes('NotFoundError')) {
+        setError("No camera found. Please connect a camera device.");
+      } else if (errorMsg.includes('NotReadableError')) {
+        setError("Camera is already in use by another application.");
+      } else {
+        setError(`Camera error: ${errorMsg}`);
+      }
     }
   };
 
@@ -203,7 +219,14 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true }: 
           borderRadius: '8px',
           fontSize: '0.9em'
         }}>
-          ⚠️ {error}
+          <div>⚠️ {error}</div>
+          {error.includes('HTTPS') && (
+            <div style={{ marginTop: '8px', fontSize: '0.85em' }}>
+              💡 Tip: Camera access requires a secure connection. Try accessing via:
+              <br/>• <code>https://localhost:5174/</code>
+              <br/>• or use the IP address (<code>http://10.0.0.126:5174/</code>) and allow insecure localhost in browser
+            </div>
+          )}
         </div>
       )}
       <video

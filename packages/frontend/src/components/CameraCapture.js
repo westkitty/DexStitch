@@ -12,6 +12,11 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true }) 
         }
         try {
             setError("");
+            // Check if getUserMedia is available
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                setError("Camera API not available. Please use HTTPS or localhost, and ensure your browser supports camera access.");
+                return;
+            }
             const nextStream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     facingMode: "user",
@@ -35,7 +40,19 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true }) 
         }
         catch (err) {
             console.error("Camera error:", err);
-            setError(err instanceof Error ? err.message : "Failed to access camera. Please allow camera permissions.");
+            const errorMsg = err instanceof Error ? err.message : String(err);
+            if (errorMsg.includes('NotAllowedError') || errorMsg.includes('Permission')) {
+                setError("Camera permission denied. Please allow camera access in your browser settings.");
+            }
+            else if (errorMsg.includes('NotFoundError')) {
+                setError("No camera found. Please connect a camera device.");
+            }
+            else if (errorMsg.includes('NotReadableError')) {
+                setError("Camera is already in use by another application.");
+            }
+            else {
+                setError(`Camera error: ${errorMsg}`);
+            }
         }
     };
     const stopCamera = () => {
@@ -177,7 +194,7 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true }) 
                     color: 'white',
                     borderRadius: '8px',
                     fontSize: '0.9em'
-                }, children: ["\u26A0\uFE0F ", error] })), _jsx("video", { ref: videoRef, autoPlay: true, playsInline: true, muted: true, style: { display: 'none' } }), _jsx("canvas", { ref: canvasRef, style: {
+                }, children: [_jsxs("div", { children: ["\u26A0\uFE0F ", error] }), error.includes('HTTPS') && (_jsxs("div", { style: { marginTop: '8px', fontSize: '0.85em' }, children: ["\uD83D\uDCA1 Tip: Camera access requires a secure connection. Try accessing via:", _jsx("br", {}), "\u2022 ", _jsx("code", { children: "https://localhost:5174/" }), _jsx("br", {}), "\u2022 or use the IP address (", _jsx("code", { children: "http://10.0.0.126:5174/" }), ") and allow insecure localhost in browser"] }))] })), _jsx("video", { ref: videoRef, autoPlay: true, playsInline: true, muted: true, style: { display: 'none' } }), _jsx("canvas", { ref: canvasRef, style: {
                     width: '100%',
                     maxWidth: '640px',
                     height: 'auto',
