@@ -20,10 +20,12 @@ export type PatternSpec = {
   id: string;
   name: string;
   parameters: {
-    /** Ease factor (typically 0.8 to 1.5) */
-    ease: number;
+    /** Ease factor (typically 0.8 to 1.5), defaults to 1.0 if not specified */
+    ease?: number;
     /** Optional dart depth in mm */
     dartDepth?: number;
+    /** Custom parameters for specific templates */
+    [key: string]: unknown;
   };
 };
 

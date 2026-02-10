@@ -6,7 +6,7 @@ import type { MeasurementSet, PatternResult, PatternSpec, Point2D } from "@dexst
  */
 export function generatePattern(measurements: MeasurementSet, spec: PatternSpec): PatternResult {
   const { chest, waist, height } = measurements;
-  const { ease, dartDepth = 0 } = spec.parameters;
+  const { ease = 1.05, dartDepth = 0 } = spec.parameters;
 
   // Calculate panel dimensions in mm
   // Panel width: half chest + ease allowance

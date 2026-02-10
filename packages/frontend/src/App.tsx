@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { generatePattern, nestPieces } from "@dexstitch/core";
+import type { PatternSpec } from "@dexstitch/types";
 import Tabs from "./components/Tabs";
 import MeasurementsView from "./views/MeasurementsView";
 import DesignView from "./views/DesignView";
 import LayoutView from "./views/LayoutView";
 import EmbroideryView from "./views/EmbroideryView";
 import ExportView from "./views/ExportView";
+import { TemplatesView } from "./views/TemplatesView";
 import { ProjectProvider, createDefaultProject, useProject } from "./state";
 import { loadProject, saveProject } from "./db";
 import { createCollaborationManager, type CollabStatus } from "./collaboration";
@@ -13,7 +15,7 @@ import { createCollaborationManager, type CollabStatus } from "./collaboration";
 function AppShell() {
   const { project, setProject, updateMeasurements, updatePatternSpec, setEmbroidery } =
     useProject();
-  const [activeTab, setActiveTab] = useState("measurements");
+  const [activeTab, setActiveTab] = useState("templates");
   const [collabStatus, setCollabStatus] = useState<CollabStatus>({
     connected: false,
     status: 'disconnected',
@@ -127,6 +129,7 @@ function AppShell() {
 
   const tabs = useMemo(
     () => [
+      { id: "templates", label: "📚 Templates" },
       { id: "measurements", label: "Measurements" },
       { id: "design", label: "Design" },
       { id: "layout", label: "Layout" },
@@ -160,6 +163,14 @@ function AppShell() {
             </span>
           </div>
         </div>
+        {activeTab === "templates" && (
+          <TemplatesView
+            onSelectTemplate={(spec: PatternSpec) => {
+              updatePatternSpec(spec);
+              setActiveTab("design");
+            }}
+          />
+        )}
         {activeTab === "measurements" && (
           <MeasurementsView
             measurements={project.measurements}
