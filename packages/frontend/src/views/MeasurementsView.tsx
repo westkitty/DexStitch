@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { estimateMeasurementsFromPose, smoothMeasurements, type PoseLandmark } from "@dexstitch/core";
+import { getPoseEstimator, disposePoseEstimator } from "../ml/poseEstimator";
 import CameraCapture from "../components/CameraCapture";
 import type { MeasurementSet, PatternSpec } from "@dexstitch/types";
 
@@ -16,23 +17,57 @@ export default function MeasurementsView({
   onMeasurementsChange,
   onPatternSpecChange
 }: MeasurementsViewProps) {
-  const [scanStatus, setScanStatus] = useState("Ready");
+  const [scanStatus, setScanStatus] = useState("Loading ML model...");
   const [referencHeight, setReferenceHeight] = useState(measurements.height);
+  const [modelReady, setModelReady] = useState(false);
+
+  // Initialize pose estimator on component mount
+  useEffect(() => {
+    const initModel = async () => {
+      try {
+        const estimator = getPoseEstimator();
+        await estimator.initialize();
+        setModelReady(true);
+        setScanStatus("Ready - Point camera at subject");
+      } catch (error) {
+        setScanStatus(`Model error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        console.error("Failed to load pose model:", error);
+      }
+    };
+
+    initModel();
+
+    // Cleanup on unmount
+    return () => {
+      disposePoseEstimator();
+    };
+  }, []);
 
   const handleScanFrame = async (imageData: ImageData) => {
+    if (!modelReady) {
+      setScanStatus("Model not ready");
+      return;
+    }
+
     try {
       setScanStatus("Analyzing pose...");
       
-      // Simulate pose estimation (in production, use MediaPipe Pose or TensorFlow.js)
-      const mockLandmarks: PoseLandmark[] = generateMockLandmarks(imageData);
+      // Get real pose landmarks from ML model
+      const estimator = getPoseEstimator();
+      const landmarks = await estimator.estimatePose(imageData);
       
-      const estimates = estimateMeasurementsFromPose(mockLandmarks, {
+      if (landmarks.length === 0) {
+        setScanStatus("No pose detected - try better lighting or move closer");
+        return;
+      }
+
+      const estimates = estimateMeasurementsFromPose(landmarks, {
         referenceHeight: referencHeight,
         minConfidence: 0.5
       });
 
       if (estimates.length === 0) {
-        setScanStatus("No pose detected, try better lighting");
+        setScanStatus("Could not estimate measurements from pose");
         return;
       }
 
@@ -44,10 +79,11 @@ export default function MeasurementsView({
         }
       }
 
-      setScanStatus(`Detected ${estimates.length} measurements`);
+      setScanStatus(`Detected ${estimates.length} measurements ✓`);
       onMeasurementsChange(updates);
     } catch (error) {
-      setScanStatus(`Error: ${error instanceof Error ? error.message : 'Unknown'}`);
+      setScanStatus(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Pose estimation error:", error);
     }
   };
 
@@ -104,7 +140,7 @@ export default function MeasurementsView({
         </div>
       </div>
       <div style={{ marginTop: 20 }}>
-        <h3 className="section-title">Body Scanner (Vision)</h3>
+        <h3 className="section-title">Body Scanner (TensorFlow.js MoveNet)</h3>
         <div className="scan-controls">
           <div>
             <label htmlFor="ref-height">Reference height (mm):</label>
@@ -116,30 +152,16 @@ export default function MeasurementsView({
               placeholder="Your actual height in mm"
             />
           </div>
-          <p className="status-pill">{scanStatus}</p>
+          <p className="status-pill" style={{ 
+            backgroundColor: modelReady ? '#90EE90' : '#FFD700',
+            color: '#000'
+          }}>
+            {scanStatus}
+          </p>
         </div>
-        <CameraCapture onFrame={handleScanFrame} />
+        {modelReady && <CameraCapture onFrame={handleScanFrame} />}
+        {!modelReady && <p style={{ textAlign: 'center', color: '#666' }}>Loading ML model... This may take 30-60 seconds.</p>}
       </div>
     </div>
   );
-}
-
-/**
- * Generate mock pose landmarks from image data
- * In production, use MediaPipe Pose or TensorFlow.js pose estimator
- */
-function generateMockLandmarks(imageData: ImageData): PoseLandmark[] {
-  const { width, height } = imageData;
-  
-  // Simulate detected pose landmarks (33 points for MediaPipe Pose)
-  // In real implementation, run ML model on imageData
-  return [
-    { x: width * 0.5, y: height * 0.1, visibility: 0.95 },  // NOSE
-    { x: width * 0.5, y: height * 0.2, visibility: 0.9 },   // LEFT_SHOULDER
-    { x: width * 0.5, y: height * 0.2, visibility: 0.9 },   // RIGHT_SHOULDER
-    { x: width * 0.5, y: height * 0.4, visibility: 0.85 },  // LEFT_HIP
-    { x: width * 0.5, y: height * 0.4, visibility: 0.85 },  // RIGHT_HIP
-    { x: width * 0.5, y: height * 0.95, visibility: 0.8 },  // LEFT_ANKLE
-    { x: width * 0.5, y: height * 0.95, visibility: 0.8 }   // RIGHT_ANKLE
-  ];
 }
