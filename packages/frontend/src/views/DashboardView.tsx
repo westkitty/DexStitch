@@ -9,6 +9,11 @@ export function DashboardView() {
           src="/DexStitchBanner.jpg"
           alt="DexStitch Banner"
           className="dashboard-banner"
+          onError={(e) => {
+            console.error('Banner failed to load:', e);
+            e.currentTarget.src = '/DexStitchLogo.png';
+          }}
+          onLoad={() => console.log('Banner loaded successfully')}
         />
         <h1 className="dashboard-title">Welcome to DexStitch</h1>
         <p className="dashboard-subtitle">

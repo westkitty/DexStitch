@@ -20,6 +20,7 @@ export default function MeasurementsView({
   const [scanStatus, setScanStatus] = useState("Loading ML model...");
   const [referencHeight, setReferenceHeight] = useState(measurements.height);
   const [modelReady, setModelReady] = useState(false);
+  const [currentLandmarks, setCurrentLandmarks] = useState<Array<{x: number, y: number, z?: number, visibility?: number}>>([]);
 
   // Initialize pose estimator on component mount
   useEffect(() => {
@@ -55,6 +56,9 @@ export default function MeasurementsView({
       // Get real pose landmarks from ML model
       const estimator = getPoseEstimator();
       const landmarks = await estimator.estimatePose(imageData);
+
+      // Update landmarks for visualization
+      setCurrentLandmarks(landmarks);
 
       if (landmarks.length === 0) {
         setScanStatus("No pose detected - try better lighting or move closer");
@@ -140,7 +144,37 @@ export default function MeasurementsView({
         </div>
       </div>
       <div style={{ marginTop: 20 }}>
-        <h3 className="section-title">Body Scanner (TensorFlow.js MoveNet)</h3>
+        <h3 className="section-title">Body Scanner (AI-Powered Measurements)</h3>
+        
+        <div style={{ 
+          background: 'var(--panel-bg)', 
+          border: '2px solid var(--highlight)',
+          borderRadius: '8px',
+          padding: '16px',
+          marginBottom: '16px'
+        }}>
+          <h4 style={{ margin: '0 0 12px 0', color: 'var(--highlight)' }}>📸 How to Use the Scanner:</h4>
+          <ol style={{ margin: 0, paddingLeft: '20px', lineHeight: '1.8' }}>
+            <li><strong>Enter your height</strong> in millimeters (e.g., 1750mm for 5'9")</li>
+            <li><strong>Click "Start Camera"</strong> to enable your webcam</li>
+            <li><strong>Position yourself</strong> in the camera frame:
+              <ul style={{ marginTop: '8px', marginBottom: '8px' }}>
+                <li>Stand 6-8 feet from the camera</li>
+                <li>Face the camera directly with arms at sides or slightly out</li>
+                <li>Ensure your full body is visible from head to feet</li>
+                <li>Align yourself with the dotted guide overlay</li>
+                <li>Use good lighting - avoid backlighting</li>
+              </ul>
+            </li>
+            <li><strong>Watch for green skeleton</strong> - when it appears, you're being detected</li>
+            <li><strong>Click "Capture Frame"</strong> when positioned correctly</li>
+            <li><strong>Review measurements</strong> - AI will estimate key body dimensions</li>
+          </ol>
+          <p style={{ margin: '12px 0 0 0', color: 'var(--text-secondary)', fontSize: '0.9em' }}>
+            💡 <strong>Tip:</strong> Wear fitted clothing and capture multiple times for better accuracy. Manual adjustments can be made to any measurement below.
+          </p>
+        </div>
+        
         <div className="scan-controls">
           <div>
             <label htmlFor="ref-height">Reference height (mm):</label>
@@ -159,8 +193,29 @@ export default function MeasurementsView({
             {scanStatus}
           </p>
         </div>
-        {modelReady && <CameraCapture onFrame={handleScanFrame} />}
-        {!modelReady && <p style={{ textAlign: 'center', color: '#666' }}>Loading ML model... This may take 30-60 seconds.</p>}
+        {modelReady && (
+          <div style={{ marginTop: '16px' }}>
+            <CameraCapture 
+              onFrame={handleScanFrame} 
+              landmarks={currentLandmarks}
+              showGuide={true}
+            />
+          </div>
+        )}
+        {!modelReady && (
+          <div style={{ 
+            textAlign: 'center', 
+            padding: '40px',
+            background: 'var(--input-bg)',
+            borderRadius: '12px',
+            marginTop: '16px'
+          }}>
+            <div style={{ fontSize: '2em', marginBottom: '16px' }}>⏳</div>
+            <p style={{ color: 'var(--text-secondary)', margin: '0' }}>
+              Loading ML model... This may take 30-60 seconds on first use.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
