@@ -139,4 +139,20 @@ export type ExportBundle = {
   embroideryFile?: ArrayBuffer;
 };
 
+/**
+ * Complete project data for persistence
+ */
+export type ProjectData = {
+  measurements: MeasurementSet;
+  pattern?: PatternResult;
+  nesting?: NestingOutput;
+  embroidery?: EmbroideryProgram;
+  spec?: PatternSpec;
+  metadata?: {
+    created?: string;
+    modified?: string;
+    version?: string;
+  };
+};
+
 export const typesVersion = "0.1.0";

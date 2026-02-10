@@ -198,7 +198,7 @@ describe('Plugin System', () => {
         if (plugin?.canHandle) {
           const emptyPattern: PatternResult = { pieces: [] };
           const fullPattern: PatternResult = {
-            pieces: [{ id: '1', name: 'P1', outline: [], grainline: [] }]
+            pieces: [{ id: '1', name: 'P1', outline: [], grainline: [{ x: 0, y: 0 }, { x: 0, y: 100 }] }]
           };
 
           expect(plugin.canHandle(emptyPattern)).toBe(false);

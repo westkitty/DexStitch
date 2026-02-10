@@ -223,6 +223,305 @@ export function getJockstrapTemplates(): GarmentTemplate[] {
           zipperLength: 100
         }
       }
+    },
+    {
+      id: 'jock-wide-band-classic',
+      name: 'Wide Band Classic Jock',
+      category: 'jockstraps',
+      description: 'A classic jockstrap updated with a modern wide elastic waistband.',
+      tags: ['jockstrap', 'wide-band', 'classic', 'comfort', 'cotton'],
+      difficulty: 'beginner',
+      estimatedTime: '2 hours',
+      fabricRecommendations: ['Cotton pouch', 'Wide elastic'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'jock-wide-band-classic',
+        name: 'Wide Band Classic',
+        parameters: {
+          waistbandWidth: 50,
+          pouchMaterial: 'cotton',
+          legStraps: 25
+        }
+      }
+    },
+    {
+      id: 'jock-narrow-band-sport',
+      name: 'Narrow Band Sport Jock',
+      category: 'jockstraps',
+      description: 'Low-profile sport jock with narrow waistband to minimize bulk.',
+      tags: ['jockstrap', 'sport', 'minimal', 'lightweight', 'running'],
+      difficulty: 'beginner',
+      estimatedTime: '2 hours',
+      fabricRecommendations: ['Moisture-wicking mesh', 'Narrow elastic'],
+      requiredMeasurements: ['waist'],
+      spec: {
+        id: 'jock-narrow-band-sport',
+        name: 'Narrow Band Sport',
+        parameters: {
+          waistbandWidth: 20,
+          pouchBreathability: 'high',
+          support: 'medium'
+        }
+      }
+    },
+    {
+      id: 'jock-mesh-pouch',
+      name: 'Full Mesh Pouch Jock',
+      category: 'jockstraps',
+      description: 'Jockstrap featuring a breathable, see-through mesh pouch.',
+      tags: ['jockstrap', 'mesh', 'breathable', 'sexy', 'summer'],
+      difficulty: 'beginner',
+      estimatedTime: '1.5 hours',
+      fabricRecommendations: ['Athletic mesh', 'Soft elastic'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'jock-mesh-pouch',
+        name: 'Mesh Pouch Jock',
+        parameters: {
+          pouchVisibility: 'sheer',
+          airflow: 'max',
+          legStraps: 20
+        }
+      }
+    },
+    {
+      id: 'jock-cotton-retro',
+      name: 'Retro Cotton Jock',
+      category: 'jockstraps',
+      description: 'Vintage style cotton jockstrap reminiscent of 1950s gym gear.',
+      tags: ['jockstrap', 'retro', 'vintage', 'cotton', 'old-school'],
+      difficulty: 'intermediate',
+      estimatedTime: '3 hours',
+      fabricRecommendations: ['Heavy cotton jersey', 'Natural rubber elastic'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'jock-cotton-retro',
+        name: 'Retro Cotton Jock',
+        parameters: {
+          waistbandColor: 'cream',
+          stitchStyle: 'vintage-zigzag',
+          pouchShape: 'traditional'
+        }
+      }
+    },
+    {
+      id: 'jock-strapless-pouch',
+      name: 'Strapless Pouch Jock',
+      category: 'jockstraps',
+      description: 'Minimalist "strapless" design that clips or adheres (C-string style).',
+      tags: ['jockstrap', 'strapless', 'minimal', 'tan-lines', 'novelty'],
+      difficulty: 'advanced',
+      estimatedTime: '3 hours',
+      fabricRecommendations: ['Rigid wire core', 'Soft covering fabric'],
+      requiredMeasurements: ['hip'],
+      spec: {
+        id: 'jock-strapless-pouch',
+        name: 'Strapless Pouch',
+        parameters: {
+          tensionStyle: 'internal-frame',
+          coverage: 'front-only'
+        }
+      }
+    },
+    {
+      id: 'jock-lift-support',
+      name: 'Lift & Support Jock',
+      category: 'jockstraps',
+      description: 'Engineered specifically for maximum lift and frontal enhancement.',
+      tags: ['jockstrap', 'enhancement', 'lift', 'support', 'push-up'],
+      difficulty: 'intermediate',
+      estimatedTime: '3 hours',
+      fabricRecommendations: ['Stretch cotton', 'Internal sling fabric'],
+      requiredMeasurements: ['waist'],
+      spec: {
+        id: 'jock-lift-support',
+        name: 'Lift Support Jock',
+        parameters: {
+          internalSling: true,
+          pouchStructure: 'lifting',
+          waistbandWidth: 35
+        }
+      }
+    },
+    {
+      id: 'jock-double-strap',
+      name: 'Double Strap Jock',
+      category: 'jockstraps',
+      description: 'Features double leg straps for a unique aesthetic and extra grip.',
+      tags: ['jockstrap', 'double-strap', 'fetish', 'fashion', 'secure'],
+      difficulty: 'intermediate',
+      estimatedTime: '3 hours',
+      fabricRecommendations: ['Elastic', 'Spandex'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'jock-double-strap',
+        name: 'Double Strap Jock',
+        parameters: {
+          strapCount: 2, // per leg
+          strapSpacing: 20,
+          pouchStyle: 'standard'
+        }
+      }
+    },
+    {
+      id: 'jock-fashion-neon',
+      name: 'Neon Fashion Jock',
+      category: 'jockstraps',
+      description: 'Bright neon colors for parties and visibility.',
+      tags: ['jockstrap', 'neon', 'party', 'fashion', 'bright'],
+      difficulty: 'beginner',
+      estimatedTime: '2 hours',
+      fabricRecommendations: ['Neon spandex', 'Colored elastic'],
+      requiredMeasurements: ['waist'],
+      spec: {
+        id: 'jock-fashion-neon',
+        name: 'Neon Fashion Jock',
+        parameters: {
+          colorParams: 'custom-neon',
+          blacklightReactive: true,
+          legStraps: 20
+        }
+      }
+    },
+    {
+      id: 'jock-swim-support',
+      name: 'Swim Support Jock',
+      category: 'jockstraps',
+      description: 'Designed to be worn under board shorts for support.',
+      tags: ['jockstrap', 'swim', 'underwear', 'support', 'water'],
+      difficulty: 'beginner',
+      estimatedTime: '2 hours',
+      fabricRecommendations: ['Chlorine resistant mesh', 'Swim elastic'],
+      requiredMeasurements: ['waist'],
+      spec: {
+        id: 'jock-swim-support',
+        name: 'Swim Support Jock',
+        parameters: {
+          quickDry: true,
+          saltResistance: true,
+          profile: 'low'
+        }
+      }
+    },
+    {
+      id: 'jock-protective-cup',
+      name: 'Protective Cup Jock v2',
+      category: 'jockstraps',
+      description: 'Updated protective jock with improved cup pocket stability.',
+      tags: ['jockstrap', 'protection', 'sports', 'cup', 'safety'],
+      difficulty: 'intermediate',
+      estimatedTime: '3 hours',
+      fabricRecommendations: ['Heavy duty mesh', 'Wide elastic'],
+      requiredMeasurements: ['waist'],
+      spec: {
+        id: 'jock-protective-cup',
+        name: 'Cup Jock v2',
+        parameters: {
+          pocketSecure: 'velcro-tab',
+          cupSize: 'universal',
+          ventilation: true
+        }
+      }
+    },
+    {
+      id: 'jock-open-back-brief',
+      name: 'Open Back Brief Jock',
+      category: 'jockstraps',
+      description: 'Brief front with a jockstrap-style open back.',
+      tags: ['jockstrap', 'hybrid', 'brief-front', 'open-back', 'fashion'],
+      difficulty: 'intermediate',
+      estimatedTime: '3 hours',
+      fabricRecommendations: ['Microfiber', 'Elastic'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'jock-open-back-brief',
+        name: 'Open Back Brief Jock',
+        parameters: {
+          frontCoverage: 'full-brief',
+          backStyle: 'jock-straps',
+          sideSeam: 50
+        }
+      }
+    },
+    {
+      id: 'jock-string-back',
+      name: 'String Back Jock',
+      category: 'jockstraps',
+      description: 'Leg straps made of very think string elastic for minimal lines.',
+      tags: ['jockstrap', 'string', 'minimal', 'tan-lines', 'revealing'],
+      difficulty: 'beginner',
+      estimatedTime: '1.5 hours',
+      fabricRecommendations: ['Round elastic cord', 'Soft pouch fabric'],
+      requiredMeasurements: ['waist'],
+      spec: {
+        id: 'jock-string-back',
+        name: 'String Back Jock',
+        parameters: {
+          legStrapType: 'round-cord',
+          strapThickness: 3,
+          pouchStyle: 'triangle'
+        }
+      }
+    },
+    {
+      id: 'jock-contrast-binding',
+      name: 'Contrast Binding Jock',
+      category: 'jockstraps',
+      description: 'Jockstrap featuring high contrast color binding on the pouch.',
+      tags: ['jockstrap', 'contrast', 'retro', 'fashion', 'binding'],
+      difficulty: 'intermediate',
+      estimatedTime: '2.5 hours',
+      fabricRecommendations: ['Cotton', 'Contrast bias tape'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'jock-contrast-binding',
+        name: 'Contrast Binding Jock',
+        parameters: {
+          bindingWidth: 10,
+          colorCombo: 'custom',
+          waistbandMatchBinding: true
+        }
+      }
+    },
+    {
+      id: 'jock-logo-band',
+      name: 'Big Logo Jockstrap',
+      category: 'jockstraps',
+      description: 'Space for custom branding on a wide waistband.',
+      tags: ['jockstrap', 'logo', 'brand', 'merch', 'wide-band'],
+      difficulty: 'beginner',
+      estimatedTime: '2 hours',
+      fabricRecommendations: ['Jacquard elastic (custom)', 'Cotton pouch'],
+      requiredMeasurements: ['waist'],
+      spec: {
+        id: 'jock-logo-band',
+        name: 'Big Logo Jock',
+        parameters: {
+          logoHeight: 40,
+          waistbandWidth: 45,
+          brandingSpace: true
+        }
+      }
+    },
+    {
+      id: 'jock-seamless-knit',
+      name: 'Seamless Knit Jock',
+      category: 'jockstraps',
+      description: 'Tubular knit jockstrap with no side seams.',
+      tags: ['jockstrap', 'seamless', 'knit', 'modern', 'comfort'],
+      difficulty: 'advanced', // Needs specialized equipment/fabric
+      estimatedTime: '1 hour', // if knitting machine
+      fabricRecommendations: ['Circular knit tube', 'Spandex yarn'],
+      requiredMeasurements: ['waist'],
+      spec: {
+        id: 'jock-seamless-knit',
+        name: 'Seamless Knit Jock',
+        parameters: {
+          seamCount: 0,
+          stretchZones: 'integrated',
+          waistbandIntegrated: true
+        }
+      }
     }
   ];
 }

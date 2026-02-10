@@ -121,7 +121,7 @@ export function getHarnessTemplates(): GarmentTemplate[] {
         }
       }
     },
-    
+
     // Full Body Harnesses
     {
       id: 'harness-full-body-basic',
@@ -278,6 +278,309 @@ export function getHarnessTemplates(): GarmentTemplate[] {
           pockets: true,
           toolLoops: 6,
           adjustmentPoints: 5
+        }
+      }
+    },
+    {
+      id: 'harness-x-back-leather',
+      name: 'X-Back Leather Harness',
+      category: 'harnesses',
+      description: 'Classic leather harness with a distinct X-shape back design.',
+      tags: ['harness', 'leather', 'x-back', 'classic', 'fetish'],
+      difficulty: 'intermediate',
+      estimatedTime: '4 hours',
+      fabricRecommendations: ['Full-grain leather', 'Bonded leather'],
+      requiredMeasurements: ['chest', 'waist'],
+      spec: {
+        id: 'harness-x-back-leather',
+        name: 'X-Back Leather Harness',
+        parameters: {
+          strapWidth: 30,
+          ringSize: 45,
+          rivetStyle: 'flat',
+          adjustable: true
+        }
+      }
+    },
+    {
+      id: 'harness-y-back-elastic',
+      name: 'Y-Back Elastic Harness',
+      category: 'harnesses',
+      description: 'Sporty Y-back harness made from durable elastic webbing.',
+      tags: ['harness', 'elastic', 'sporty', 'y-back', 'party'],
+      difficulty: 'beginner',
+      estimatedTime: '2 hours',
+      fabricRecommendations: ['Heavy elastic', 'Nylon webbing'],
+      requiredMeasurements: ['chest'],
+      spec: {
+        id: 'harness-y-back-elastic',
+        name: 'Y-Back Elastic Harness',
+        parameters: {
+          strapWidth: 40,
+          color: 'neon',
+          stretch: true,
+          ringType: 'd-ring'
+        }
+      }
+    },
+    {
+      id: 'harness-bulldog-neoprene',
+      name: 'Neoprene Bulldog Harness',
+      category: 'harnesses',
+      description: 'Soft neoprene bulldog harness for comfort during extended wear.',
+      tags: ['harness', 'neoprene', 'bulldog', 'comfort', 'play'],
+      difficulty: 'beginner',
+      estimatedTime: '2-3 hours',
+      fabricRecommendations: ['Neoprene', 'Scuba fabric'],
+      requiredMeasurements: ['chest'],
+      spec: {
+        id: 'harness-bulldog-neoprene',
+        name: 'Neoprene Bulldog Harness',
+        parameters: {
+          strapWidth: 50,
+          padded: true,
+          closure: 'velcro', // or buckles
+          colorConflict: 'contrast-binding'
+        }
+      }
+    },
+    {
+      id: 'harness-chest-strap-minimal',
+      name: 'Minimal Chest Strap',
+      category: 'harnesses',
+      description: 'Simple horizontal chest strap to accentuate pectorals.',
+      tags: ['harness', 'minimal', 'chest', 'simple', 'starter'],
+      difficulty: 'beginner',
+      estimatedTime: '1 hour',
+      fabricRecommendations: ['Leather', 'Elastic', 'PVC'],
+      requiredMeasurements: ['chest'],
+      spec: {
+        id: 'harness-chest-strap-minimal',
+        name: 'Minimal Chest Strap',
+        parameters: {
+          strapWidth: 25,
+          buckleLocation: 'back',
+          adjustable: true
+        }
+      }
+    },
+    {
+      id: 'harness-shoulder-caps',
+      name: 'Shoulder Cap Harness',
+      category: 'harnesses',
+      description: 'Harness featuring broader shoulder caps for a gladiator look.',
+      tags: ['harness', 'shoulder', 'gladiator', 'costume', 'armor'],
+      difficulty: 'advanced',
+      estimatedTime: '6 hours',
+      fabricRecommendations: ['Thick leather', 'EVA foam (cosplay)'],
+      requiredMeasurements: ['chest'],
+      spec: {
+        id: 'harness-shoulder-caps',
+        name: 'Shoulder Cap Harness',
+        parameters: {
+          capWidth: 120,
+          articulated: true,
+          riveting: 'heavy'
+        }
+      }
+    },
+    {
+      id: 'harness-full-body-straps',
+      name: 'Full Body Strap System',
+      category: 'harnesses',
+      description: 'Complex system of straps covering torso and thighs.',
+      tags: ['harness', 'full-body', 'complex', 'bondage', 'straps'],
+      difficulty: 'advanced',
+      estimatedTime: '8 hours',
+      fabricRecommendations: ['Nylon webbing', 'Leather straps'],
+      requiredMeasurements: ['chest', 'waist', 'hip', 'height'],
+      spec: {
+        id: 'harness-full-body-straps',
+        name: 'Full Body Straps',
+        parameters: {
+          connections: 12,
+          adjustableLegs: true,
+          torsoLength: 'variable'
+        }
+      }
+    },
+    {
+      id: 'harness-leg-straps-set',
+      name: 'Thigh Harness Set',
+      category: 'harnesses',
+      description: 'Standalone thigh harnesses, worn as a pair.',
+      tags: ['harness', 'legs', 'thighs', 'accessory', 'pair'],
+      difficulty: 'beginner',
+      estimatedTime: '2 hours',
+      fabricRecommendations: ['Elastic', 'Leather', 'PVC'],
+      requiredMeasurements: ['hip'],
+      spec: {
+        id: 'harness-leg-straps-set',
+        name: 'Thigh Harness Set',
+        parameters: {
+          strapWidth: 20,
+          garters: false,
+          buckle: true
+        }
+      }
+    },
+    {
+      id: 'harness-h-style',
+      name: 'H-Style Harness',
+      category: 'harnesses',
+      description: 'Classic H-front design, simple and effective.',
+      tags: ['harness', 'h-style', 'classic', 'simple', 'clean'],
+      difficulty: 'beginner',
+      estimatedTime: '3 hours',
+      fabricRecommendations: ['Leather', 'Webbing'],
+      requiredMeasurements: ['chest', 'waist'],
+      spec: {
+        id: 'harness-h-style',
+        name: 'H-Style Harness',
+        parameters: {
+          barHeight: 'mid-chest',
+          strapWidth: 30,
+          adjustable: true
+        }
+      }
+    },
+    {
+      id: 'harness-criss-cross',
+      name: 'Criss-Cross Chest Harness',
+      category: 'harnesses',
+      description: 'Multiple straps crossing over the chest for geometric effect.',
+      tags: ['harness', 'geometric', 'criss-cross', 'fashion', 'complex'],
+      difficulty: 'intermediate',
+      estimatedTime: '5 hours',
+      fabricRecommendations: ['Thin leather', 'Elastic cord'],
+      requiredMeasurements: ['chest'],
+      spec: {
+        id: 'harness-criss-cross',
+        name: 'Criss-Cross Harness',
+        parameters: {
+          crossPoints: 3,
+          symmetry: 'radial',
+          ringCenter: true
+        }
+      }
+    },
+    {
+      id: 'harness-suspender-style',
+      name: 'Suspender Harness',
+      category: 'harnesses',
+      description: 'Harness that doubles as heavy-duty suspenders.',
+      tags: ['harness', 'suspenders', 'utility', 'dual-purpose', 'fashion'],
+      difficulty: 'intermediate',
+      estimatedTime: '3 hours',
+      fabricRecommendations: ['Elastic webbing', 'Leather ends'],
+      requiredMeasurements: ['height', 'chest', 'waist'],
+      spec: {
+        id: 'harness-suspender-style',
+        name: 'Suspender Harness',
+        parameters: {
+          clipEnd: 'alligator',
+          yBack: true,
+          width: 35
+        }
+      }
+    },
+    {
+      id: 'harness-mesh-crop',
+      name: 'Mesh Crop Top Harness',
+      category: 'harnesses',
+      description: 'Hybrid crop top made of wide mesh netting.',
+      tags: ['harness', 'mesh', 'crop-top', 'hybrid', 'clubwear'],
+      difficulty: 'intermediate',
+      estimatedTime: '3 hours',
+      fabricRecommendations: ['Large hole mesh', 'Netting'],
+      requiredMeasurements: ['chest', 'waist'],
+      spec: {
+        id: 'harness-mesh-crop',
+        name: 'Mesh Crop Harness',
+        parameters: {
+          holeSize: 20, // mm
+          binding: 'contrast',
+          cropLength: 300
+        }
+      }
+    },
+    {
+      id: 'harness-buckle-heavy',
+      name: 'Heavy Buckle Harness',
+      category: 'harnesses',
+      description: 'Harness featuring oversized buckles as the main aesthetic.',
+      tags: ['harness', 'buckles', 'industrial', 'heavy', 'statement'],
+      difficulty: 'advanced',
+      estimatedTime: '5 hours',
+      fabricRecommendations: ['Thick leather belt', 'Heavy webbing'],
+      requiredMeasurements: ['chest'],
+      spec: {
+        id: 'harness-buckle-heavy',
+        name: 'Heavy Buckle Harness',
+        parameters: {
+          buckleSize: 60, // mm
+          buckleCount: 4,
+          strapThickness: 4 // mm
+        }
+      }
+    },
+    {
+      id: 'harness-neon-party',
+      name: 'Neon Party Harness',
+      category: 'harnesses',
+      description: 'UV-reactive harness for club environments.',
+      tags: ['harness', 'neon', 'uv', 'party', 'rave'],
+      difficulty: 'beginner',
+      estimatedTime: '2 hours',
+      fabricRecommendations: ['UV reactive elastic', 'Fluorescent vinyl'],
+      requiredMeasurements: ['chest'],
+      spec: {
+        id: 'harness-neon-party',
+        name: 'Neon Party Harness',
+        parameters: {
+          color: 'UV-Green',
+          glowConfig: 'blacklight',
+          width: 25
+        }
+      }
+    },
+    {
+      id: 'harness-reflective-night',
+      name: 'Reflective Night Harness',
+      category: 'harnesses',
+      description: 'Safety-style harness that reflects light, adapted for fashion.',
+      tags: ['harness', 'reflective', 'safety', 'night', 'streetwear'],
+      difficulty: 'beginner',
+      estimatedTime: '2 hours',
+      fabricRecommendations: ['Reflective tape', 'Nylon with reflective strip'],
+      requiredMeasurements: ['chest', 'waist'],
+      spec: {
+        id: 'harness-reflective-night',
+        name: 'Reflective Harness',
+        parameters: {
+          stripWidth: 50,
+          reflectiveArea: 'high',
+          buckleType: 'plastic-clip'
+        }
+      }
+    },
+    {
+      id: 'harness-dual-color',
+      name: 'Dual Color Reversible Harness',
+      category: 'harnesses',
+      description: 'Two-tone harness that can be worn inside out.',
+      tags: ['harness', 'reversible', 'two-tone', 'versatile', 'fashion'],
+      difficulty: 'intermediate',
+      estimatedTime: '4 hours',
+      fabricRecommendations: ['Bonded leather (two colors)', 'Double-faced elastic'],
+      requiredMeasurements: ['chest'],
+      spec: {
+        id: 'harness-dual-color',
+        name: 'Dual Color Harness',
+        parameters: {
+          primaryColor: 'black',
+          secondaryColor: 'red',
+          reversibleBuckles: true
         }
       }
     }

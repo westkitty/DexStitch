@@ -90,8 +90,10 @@ describe('Pattern Engine', () => {
 
       for (const piece of result.pieces) {
         expect(piece.grainline).toBeDefined();
-        expect(Array.isArray(piece.grainline)).toBe(true);
-        expect(piece.grainline.length).toBeGreaterThanOrEqual(2);
+        if (piece.grainline) {
+          expect(Array.isArray(piece.grainline)).toBe(true);
+          expect(piece.grainline.length).toBeGreaterThanOrEqual(2);
+        }
       }
     });
 

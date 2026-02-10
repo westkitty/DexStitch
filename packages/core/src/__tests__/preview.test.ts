@@ -113,12 +113,11 @@ describe('Preview Model Builder', () => {
       const pattern = generatePattern(measurements, spec);
       const embroidery: EmbroideryProgram = {
         stitches: [
-          { x: 0, y: 0, type: 'move' },
-          { x: 10, y: 10, type: 'stitch' }
+          { x: 0, y: 0, command: 'jump' },
+          { x: 10, y: 10, command: 'stitch' }
         ],
         metadata: {
-          title: 'Test Embroidery',
-          author: 'Test'
+          stitchCount: 2
         }
       };
 
@@ -174,8 +173,8 @@ describe('Preview Model Builder', () => {
         allowMirroring: false
       });
       const embroidery: EmbroideryProgram = {
-        stitches: [{ x: 0, y: 0, type: 'move' }],
-        metadata: { title: 'Test', author: 'Test' }
+        stitches: [{ x: 0, y: 0, command: 'jump' }],
+        metadata: { stitchCount: 1 }
       };
 
       const preview = buildPreviewModel(pattern, nesting, embroidery);

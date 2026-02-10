@@ -231,6 +231,222 @@ export function getSingletTemplates(): GarmentTemplate[] {
           compressionZones: true
         }
       }
+    },
+    {
+      id: 'singlet-retro-low-cut',
+      name: 'Retro Low-Cut Singlet',
+      category: 'singlets',
+      description: '70s style wrestling singlet with ultra-low scoop neck and high legs.',
+      tags: ['wrestling', 'retro', 'vintage', 'low-cut', '70s'],
+      difficulty: 'intermediate',
+      estimatedTime: '3 hours',
+      fabricRecommendations: ['Nylon tricot', 'Shiny Lycra'],
+      requiredMeasurements: ['chest', 'waist', 'hip', 'height'],
+      spec: {
+        id: 'singlet-retro-low-cut',
+        name: 'Retro Low-Cut Singlet',
+        parameters: {
+          ease: 0.94,
+          legHeight: 200,
+          neckDepth: 160,
+          backCut: 140,
+          strapWidth: 35
+        }
+      }
+    },
+    {
+      id: 'singlet-powerlifting-comp',
+      name: 'Powerlifting Competition Singlet',
+      category: 'singlets',
+      description: 'Heavyweight singlet meeting powerlifting federation specs. Non-supportive construction.',
+      tags: ['powerlifting', 'competition', 'heavyweight', 'squat', 'deadlift'],
+      difficulty: 'intermediate',
+      estimatedTime: '4 hours',
+      fabricRecommendations: ['Heavyweight polyester double-knit', 'Thick supplementary spandex'],
+      requiredMeasurements: ['chest', 'waist', 'hip'],
+      spec: {
+        id: 'singlet-powerlifting-comp',
+        name: 'Powerlifting Singlet',
+        parameters: {
+          ease: 1.0,
+          legHeight: 120, // Lower cut for coverage
+          legLength: 150, // Longer leg
+          neckDepth: 100,
+          strapWidth: 60,
+          gusset: true
+        }
+      }
+    },
+    {
+      id: 'singlet-mesh-panel',
+      name: 'Mesh Panel Ventilation Singlet',
+      category: 'singlets',
+      description: 'Modern singlet with strategic mesh zones for maximum cooling.',
+      tags: ['wrestling', 'breathable', 'mesh', 'modern', 'cool'],
+      difficulty: 'advanced',
+      estimatedTime: '4-5 hours',
+      fabricRecommendations: ['Athletic mesh', 'Microfiber', 'Spandex'],
+      requiredMeasurements: ['chest', 'waist', 'hip'],
+      spec: {
+        id: 'singlet-mesh-panel',
+        name: 'Mesh Panel Singlet',
+        parameters: {
+          ease: 0.96,
+          sidePanelMesh: true,
+          backPanelMesh: true,
+          legHeight: 180,
+          neckDepth: 110
+        }
+      }
+    },
+    {
+      id: 'singlet-zipper-front',
+      name: 'Zip-Front Singlet',
+      category: 'singlets',
+      description: 'Fashion-forward singlet with functional front zipper closure.',
+      tags: ['wrestling', 'fashion', 'zipper', 'clubwear', 'access'],
+      difficulty: 'advanced',
+      estimatedTime: '4-5 hours',
+      fabricRecommendations: ['Stretch vinyl', 'Wet look spandex', 'Neoprene'],
+      requiredMeasurements: ['chest', 'waist', 'hip', 'neck'],
+      spec: {
+        id: 'singlet-zipper-front',
+        name: 'Zip-Front Singlet',
+        parameters: {
+          ease: 0.98,
+          zipperLength: 300,
+          collarHeight: 40,
+          legHeight: 170
+        }
+      }
+    },
+    {
+      id: 'singlet-womens-comp',
+      name: 'Women\'s Competition Singlet',
+      category: 'singlets',
+      description: 'FILA-compliant women\'s cut with higher neckline and adjust fit.',
+      tags: ['wrestling', 'womens', 'competition', 'fila', 'female'],
+      difficulty: 'intermediate',
+      estimatedTime: '3-4 hours',
+      fabricRecommendations: ['Opaque Lycra', 'Performance spandex'],
+      requiredMeasurements: ['chest', 'waist', 'hip'],
+      spec: {
+        id: 'singlet-womens-comp',
+        name: 'Women\'s Competition Singlet',
+        parameters: {
+          ease: 0.95,
+          bustAdjustment: true,
+          neckDepth: 80, // Higher neckline
+          armholeDepth: 180, // Adjusted armhole
+          legHeight: 160
+        }
+      }
+    },
+    {
+      id: 'singlet-womens-training',
+      name: 'Women\'s Racerback Singlet',
+      category: 'singlets',
+      description: 'Training singlet with racerback design for shoulder mobility.',
+      tags: ['wrestling', 'womens', 'training', 'racerback'],
+      difficulty: 'beginner',
+      estimatedTime: '2-3 hours',
+      fabricRecommendations: ['Soft poly-blend', 'Cotton-touch spandex'],
+      requiredMeasurements: ['chest', 'waist', 'hip'],
+      spec: {
+        id: 'singlet-womens-training',
+        name: 'Women\'s Racerback Singlet',
+        parameters: {
+          ease: 1.02,
+          racerbackWidth: 40,
+          neckDepth: 90,
+          legHeight: 150
+        }
+      }
+    },
+    {
+      id: 'singlet-high-neck',
+      name: 'High-Neck Grappling Singlet',
+      category: 'singlets',
+      description: 'Full coverage singlet preventing mat burn on chest and neck.',
+      tags: ['wrestling', 'grappling', 'high-neck', 'protection', 'nogi'],
+      difficulty: 'intermediate',
+      estimatedTime: '3 hours',
+      fabricRecommendations: ['Rashguard material', 'Durable spandex'],
+      requiredMeasurements: ['chest', 'waist', 'hip', 'neck'],
+      spec: {
+        id: 'singlet-high-neck',
+        name: 'High-Neck Singlet',
+        parameters: {
+          ease: 0.90, // Tight fit
+          neckDepth: 0, // Crew neck
+          armholeDepth: 190,
+          legHeight: 180
+        }
+      }
+    },
+    {
+      id: 'singlet-side-stripe-v2',
+      name: 'Modern Side Stripe Singlet',
+      category: 'singlets',
+      description: 'Updated classic with asymmetric side striping.',
+      tags: ['wrestling', 'stripe', 'modern', 'asymmetric', 'team'],
+      difficulty: 'intermediate',
+      estimatedTime: '3-4 hours',
+      fabricRecommendations: ['Sublimated polyester', 'Lycra'],
+      requiredMeasurements: ['chest', 'waist', 'hip'],
+      spec: {
+        id: 'singlet-side-stripe-v2',
+        name: 'Modern Side Stripe Singlet',
+        parameters: {
+          ease: 0.95,
+          stripeWidth: 60,
+          asymmetric: true,
+          legHeight: 175
+        }
+      }
+    },
+    {
+      id: 'singlet-vintage-80s',
+      name: '80s High-Cut Singlet',
+      category: 'singlets',
+      description: 'The golden era cut with very high legs and thin straps.',
+      tags: ['wrestling', '80s', 'vintage', 'retro', 'high-cut'],
+      difficulty: 'intermediate',
+      estimatedTime: '3 hours',
+      fabricRecommendations: ['Nylon spandex', 'Shiny finish fabric'],
+      requiredMeasurements: ['chest', 'waist', 'hip'],
+      spec: {
+        id: 'singlet-vintage-80s',
+        name: '80s High-Cut Singlet',
+        parameters: {
+          ease: 0.93,
+          legHeight: 220, // Very high cut
+          neckDepth: 140,
+          strapWidth: 30,
+          backCut: 130
+        }
+      }
+    },
+    {
+      id: 'singlet-youth-training',
+      name: 'Youth Universal Singlet',
+      category: 'singlets',
+      description: 'Adjustable fit singlet designed for growing bodies.',
+      tags: ['wrestling', 'youth', 'kids', 'training', 'adjustable'],
+      difficulty: 'beginner',
+      estimatedTime: '2 hours',
+      fabricRecommendations: ['Durable nylon blend', 'Washable synthetic'],
+      requiredMeasurements: ['height', 'chest', 'waist'],
+      spec: {
+        id: 'singlet-youth-training',
+        name: 'Youth Universal Singlet',
+        parameters: {
+          ease: 1.1, // Growth room
+          adjustableStraps: true,
+          legHeight: 140,
+          neckDepth: 90
+        }
+      }
     }
   ];
 }
