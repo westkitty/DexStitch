@@ -1,6 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
-import { WebrtcProvider } from "y-webrtc";
-import * as Y from "yjs";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { generatePattern, nestPieces } from "@dexstitch/core";
 import Tabs from "./components/Tabs";
 import MeasurementsView from "./views/MeasurementsView";
@@ -10,13 +8,19 @@ import EmbroideryView from "./views/EmbroideryView";
 import ExportView from "./views/ExportView";
 import { ProjectProvider, createDefaultProject, useProject } from "./state";
 import { loadProject, saveProject } from "./db";
+import { createCollaborationManager, type CollabStatus } from "./collaboration";
 
 function AppShell() {
   const { project, setProject, updateMeasurements, updatePatternSpec, setEmbroidery } =
     useProject();
   const [activeTab, setActiveTab] = useState("measurements");
-  const [collabStatus, setCollabStatus] = useState("local-only");
+  const [collabStatus, setCollabStatus] = useState<CollabStatus>({
+    connected: false,
+    status: 'disconnected',
+    peers: 0
+  });
   const collabEnabled = import.meta.env.VITE_ENABLE_COLLAB === "true";
+  const collabRef = useRef(createCollaborationManager("dexstitch-room"));
 
   useEffect(() => {
     let cancelled = false;
@@ -70,23 +74,56 @@ function AppShell() {
     return () => window.clearTimeout(handle);
   }, [project]);
 
+  // Initialize collaboration when enabled
   useEffect(() => {
     if (!collabEnabled) {
-      setCollabStatus("local-only");
+      setCollabStatus({ connected: false, status: 'disconnected', peers: 0 });
       return;
     }
 
-    const doc = new Y.Doc();
-    const provider = new WebrtcProvider("dexstitch-dev", doc);
-    provider.on("status", (event: { connected: boolean }) => {
-      setCollabStatus(event.connected ? "connected" : "disconnected");
+    const collab = collabRef.current;
+    
+    // Connect to collaboration room
+    collab.connect((status) => {
+      setCollabStatus(status);
+    }).catch((error) => {
+      console.error('Collaboration connection failed:', error);
+      setCollabStatus({ connected: false, status: 'disconnected', peers: 0 });
+    });
+
+    // Sync project to shared store
+    collab.syncProjectToY(project);
+
+    // Listen for changes from peers
+    const unsubscribe = collab.onProjectChange((remoteProject) => {
+      // Merge remote changes with local state (prefer local if just updated)
+      if (remoteProject.measurements && Date.now() - lastLocalUpdateRef.current > 500) {
+        setProject((prev) => ({
+          ...prev,
+          ...remoteProject
+        }));
+      }
+    });
+
+    // Set user awareness
+    collab.setLocalAwareness({
+      userName: 'Designer-' + Math.random().toString(36).slice(2, 8),
+      userColor: '#' + Math.floor(Math.random() * 16777215).toString(16),
+      activeView: activeTab
     });
 
     return () => {
-      provider.destroy();
-      doc.destroy();
+      unsubscribe();
+      collab.disconnect();
     };
-  }, [collabEnabled]);
+  }, [collabEnabled, project, activeTab, setProject]);
+
+  // Track last time local state was updated
+  const lastLocalUpdateRef = useRef(Date.now());
+
+  useEffect(() => {
+    lastLocalUpdateRef.current = Date.now();
+  }, [project]);
 
   const tabs = useMemo(
     () => [

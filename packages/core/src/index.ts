@@ -5,3 +5,5 @@ export * from "./nest";
 export * from "./embroideryEngine";
 export * from "./preview";
 export * from "./export";
+export * from "./bodyScanner";
+export * from "./plugins";
