@@ -177,14 +177,89 @@ export default function MeasurementsView({
         
         <div className="scan-controls">
           <div>
-            <label htmlFor="ref-height">Reference height (mm):</label>
-            <input
+            <label htmlFor="ref-height">Your Height:</label>
+            <select
               id="ref-height"
-              type="number"
               value={referencHeight}
               onChange={(e) => setReferenceHeight(Number(e.target.value))}
-              placeholder="Your actual height in mm"
-            />
+              style={{
+                width: '100%',
+                padding: '8px 12px',
+                fontSize: '1rem',
+                border: '2px solid var(--input-border)',
+                borderRadius: '6px',
+                background: 'var(--input-bg)',
+                color: 'var(--text-color)',
+                cursor: 'pointer'
+              }}
+            >
+              <option value="">Select your height...</option>
+              <optgroup label="Imperial (Feet & Inches)">
+                <option value="1524">5'0" (1524mm / 152cm)</option>
+                <option value="1549">5'1" (1549mm / 155cm)</option>
+                <option value="1575">5'2" (1575mm / 158cm)</option>
+                <option value="1600">5'3" (1600mm / 160cm)</option>
+                <option value="1626">5'4" (1626mm / 163cm)</option>
+                <option value="1651">5'5" (1651mm / 165cm)</option>
+                <option value="1676">5'6" (1676mm / 168cm)</option>
+                <option value="1702">5'7" (1702mm / 170cm)</option>
+                <option value="1727">5'8" (1727mm / 173cm)</option>
+                <option value="1753">5'9" (1753mm / 175cm)</option>
+                <option value="1778">5'10" (1778mm / 178cm)</option>
+                <option value="1803">5'11" (1803mm / 180cm)</option>
+                <option value="1829">6'0" (1829mm / 183cm)</option>
+                <option value="1854">6'1" (1854mm / 185cm)</option>
+                <option value="1880">6'2" (1880mm / 188cm)</option>
+                <option value="1905">6'3" (1905mm / 191cm)</option>
+                <option value="1930">6'4" (1930mm / 193cm)</option>
+                <option value="1956">6'5" (1956mm / 196cm)</option>
+                <option value="1981">6'6" (1981mm / 198cm)</option>
+              </optgroup>
+              <optgroup label="Metric (Centimeters)">
+                <option value="1500">150cm (4'11" / 1500mm)</option>
+                <option value="1550">155cm (5'1" / 1550mm)</option>
+                <option value="1600">160cm (5'3" / 1600mm)</option>
+                <option value="1650">165cm (5'5" / 1650mm)</option>
+                <option value="1700">170cm (5'7" / 1700mm)</option>
+                <option value="1750">175cm (5'9" / 1750mm)</option>
+                <option value="1800">180cm (5'11" / 1800mm)</option>
+                <option value="1850">185cm (6'1" / 1850mm)</option>
+                <option value="1900">190cm (6'3" / 1900mm)</option>
+                <option value="1950">195cm (6'5" / 1950mm)</option>
+                <option value="2000">200cm (6'7" / 2000mm)</option>
+              </optgroup>
+            </select>
+            {referencHeight > 0 && (
+              <div style={{ 
+                marginTop: '8px', 
+                fontSize: '0.9em', 
+                color: 'var(--text-secondary)' 
+              }}>
+                Selected: {referencHeight}mm
+                {' '}({(referencHeight / 10).toFixed(1)}cm)
+                {' '}({Math.floor(referencHeight / 304.8)}'{Math.round((referencHeight % 304.8) / 25.4)}")
+              </div>
+            )}
+            <div style={{ marginTop: '8px' }}>
+              <label htmlFor="custom-height" style={{ fontSize: '0.9em' }}>Or enter custom (mm):</label>
+              <input
+                id="custom-height"
+                type="number"
+                value={referencHeight}
+                onChange={(e) => setReferenceHeight(Number(e.target.value))}
+                placeholder="Custom height in mm"
+                style={{
+                  width: '100%',
+                  padding: '6px 10px',
+                  marginTop: '4px',
+                  fontSize: '0.95rem',
+                  border: '2px solid var(--input-border)',
+                  borderRadius: '6px',
+                  background: 'var(--input-bg)',
+                  color: 'var(--text-color)'
+                }}
+              />
+            </div>
           </div>
           <p className="status-pill" style={{
             backgroundColor: modelReady ? '#90EE90' : '#FFD700',
