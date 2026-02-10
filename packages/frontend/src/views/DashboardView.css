@@ -20,11 +20,12 @@
   box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
 }
 
-.dashboard-logo {
-  height: 120px;
-  width: auto;
-  margin-bottom: 20px;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+.dashboard-banner {
+  max-width: 600px;
+  width: 100%;
+  height: auto;
+  margin-bottom: 30px;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
 }
 
 .dashboard-title {
@@ -49,16 +50,17 @@
 }
 
 .dashboard-card {
-  background: white;
+  background: var(--bg-card);
   border-radius: 12px;
   padding: 32px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px var(--shadow);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid var(--border-color);
 }
 
 .dashboard-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 24px var(--shadow);
 }
 
 .card-icon {
@@ -70,11 +72,11 @@
 .dashboard-card h3 {
   margin: 0 0 16px 0;
   font-size: 1.8em;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .dashboard-card p {
-  color: #666;
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
@@ -91,6 +93,14 @@
 .quick-steps li {
   margin-bottom: 12px;
   line-height: 1.6;
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .quick-steps li {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="light"] .quick-steps li {
   color: #444;
 }
 
@@ -123,7 +133,7 @@
 
 .feature-list strong {
   display: block;
-  color: #333;
+  color: var(--text-primary);
   margin-bottom: 4px;
   font-size: 1.1em;
 }
@@ -131,7 +141,7 @@
 .feature-list p {
   margin: 0;
   font-size: 0.95em;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 /* Stats Card */
@@ -220,19 +230,19 @@
 .workflow-step strong {
   display: block;
   margin-bottom: 4px;
-  color: #333;
+  color: var(--text-primary);
   font-size: 1.1em;
 }
 
 .workflow-step p {
   font-size: 0.9em;
-  color: #666;
+  color: var(--text-secondary);
   margin: 0;
 }
 
 .workflow-arrow {
   font-size: 1.5em;
-  color: #ccc;
+  color: var(--text-muted);
   margin: 0 8px;
 }
 
@@ -240,25 +250,25 @@
 .dashboard-cta {
   text-align: center;
   padding: 60px 20px;
-  background: #f8f9fa;
+  background: var(--bg-card);
   border-radius: 12px;
-  border: 2px dashed #ddd;
+  border: 2px dashed var(--border-color);
 }
 
 .dashboard-cta h2 {
   margin: 0 0 16px 0;
   font-size: 2em;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .dashboard-cta p {
   font-size: 1.2em;
-  color: #666;
+  color: var(--text-secondary);
   margin: 0;
 }
 
 .dashboard-cta strong {
-  color: #667eea;
+  color: var(--accent-primary);
 }
 
 /* Responsive Design */

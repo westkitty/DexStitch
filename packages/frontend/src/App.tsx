@@ -9,6 +9,7 @@ import EmbroideryView from "./views/EmbroideryView";
 import ExportView from "./views/ExportView";
 import { DashboardView } from "./views/DashboardView";
 import { TemplateGallery } from "./components/TemplateGallery";
+import { ThemeToggle } from "./components/ThemeToggle";
 import { ProjectProvider, createDefaultProject, useProject } from "./state";
 import { loadProject, saveProject } from "./db";
 import { createCollaborationManager, type CollabStatus } from "./collaboration";
@@ -169,6 +170,7 @@ function AppShell() {
       )}
 
       <header>
+        <ThemeToggle />
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <img 
             src="/DexStitchLogo.png" 
@@ -177,7 +179,7 @@ function AppShell() {
           />
           <div>
             <h1 style={{ margin: 0 }}>DexStitch</h1>
-            <p style={{ margin: 0, fontSize: '0.9rem', color: '#666' }}>
+            <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
               Local-first pattern and embroidery workstation
             </p>
           </div>
