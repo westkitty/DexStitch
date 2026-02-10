@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/icon.png" width="128" height="128" />
+  <img src="DexStitchBanner.jpg" alt="DexStitch Banner" width="100%" />
 </div>
 
 <div align="center">
