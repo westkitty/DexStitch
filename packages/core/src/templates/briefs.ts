@@ -226,6 +226,310 @@ export function getBriefTemplates(): GarmentTemplate[] {
           backStyle: 'g-string'
         }
       }
+    },
+    {
+      id: 'brief-classic-white',
+      name: 'Classic White Brief',
+      category: 'briefs',
+      description: 'The archetype of men\'s underwear. High rise, full coverage.',
+      tags: ['brief', 'classic', 'white', 'traditional', 'cotton'],
+      difficulty: 'beginner',
+      estimatedTime: '1.5 hours',
+      fabricRecommendations: ['100% Cotton rib', 'Cotton/poly blend'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'brief-classic-white',
+        name: 'Classic White Brief',
+        parameters: {
+          rise: 'high',
+          fly: 'y-front',
+          legCut: 'low',
+          waistbandWidth: 30
+        }
+      }
+    },
+    {
+      id: 'brief-bikini-cut',
+      name: 'Modern Bikini Brief',
+      category: 'briefs',
+      description: 'Low rise brief with high cut legs for a modern silhouette.',
+      tags: ['brief', 'bikini', 'modern', 'low-rise', 'sexy'],
+      difficulty: 'beginner',
+      estimatedTime: '1.5 hours',
+      fabricRecommendations: ['Microfiber', 'Modal', 'Bamboo'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'brief-bikini-cut',
+        name: 'Bikini Brief',
+        parameters: {
+          rise: 'low',
+          legCut: 'high',
+          coverage: 'moderate',
+          waistbandWidth: 20
+        }
+      }
+    },
+    {
+      id: 'brief-sport-mesh',
+      name: 'Sport Mesh Brief',
+      category: 'briefs',
+      description: 'Breathable mesh brief designed for high-intensity activities.',
+      tags: ['brief', 'sport', 'mesh', 'athletic', 'breathable'],
+      difficulty: 'intermediate',
+      estimatedTime: '2 hours',
+      fabricRecommendations: ['Athletic mesh', 'Coolmax', 'Performance nylon'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'brief-sport-mesh',
+        name: 'Sport Mesh Brief',
+        parameters: {
+          ventilation: 'max',
+          support: 'high',
+          moistureWicking: true,
+          seams: 'flatlock'
+        }
+      }
+    },
+    {
+      id: 'brief-low-rise-trunk',
+      name: 'Low Rise Trunk',
+      category: 'briefs',
+      description: 'Square cut trunk with a shorter leg and low rise waistband.',
+      tags: ['brief', 'trunk', 'low-rise', 'square-cut', 'modern'],
+      difficulty: 'beginner',
+      estimatedTime: '2 hours',
+      fabricRecommendations: ['Cotton/Elastane', 'Modal/Spandex'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'brief-low-rise-trunk',
+        name: 'Low Rise Trunk',
+        parameters: {
+          inseam: 40,
+          rise: 'low',
+          legCut: 'square'
+        }
+      }
+    },
+    {
+      id: 'brief-boxer-brief-hybrid',
+      name: 'Boxer Brief Hybrid',
+      category: 'briefs',
+      description: 'Combines the support of a brief with the coverage of a boxer.',
+      tags: ['brief', 'boxer-brief', 'hybrid', 'support', 'coverage'],
+      difficulty: 'intermediate',
+      estimatedTime: '2.5 hours',
+      fabricRecommendations: ['Cotton jersey', 'Performance blend'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'brief-boxer-brief-hybrid',
+        name: 'Boxer Brief Hybrid',
+        parameters: {
+          inseam: 100,
+          pouch: 'articulated',
+          legGrip: false
+        }
+      }
+    },
+    {
+      id: 'brief-womens-boy-short',
+      name: 'Women\'s Boy Short',
+      category: 'briefs',
+      description: 'Full coverage women\'s brief with a square leg cut.',
+      tags: ['brief', 'womens', 'boy-short', 'coverage', 'comfortable'],
+      difficulty: 'beginner',
+      estimatedTime: '1.5 hours',
+      fabricRecommendations: ['Cotton/Spandex', 'System jersey'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'brief-womens-boy-short',
+        name: 'Boy Short',
+        parameters: {
+          rise: 'mid',
+          legCut: 'square',
+          gusset: 'lined'
+        }
+      }
+    },
+    {
+      id: 'brief-womens-high-cut',
+      name: 'Women\'s High Cut Brief',
+      category: 'briefs',
+      description: '80s inspired high cut leg opening to elongate the legs.',
+      tags: ['brief', 'womens', 'high-cut', 'retro', '80s'],
+      difficulty: 'beginner',
+      estimatedTime: '1.5 hours',
+      fabricRecommendations: ['Nylon tricot', 'Cotton blend'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'brief-womens-high-cut',
+        name: 'High Cut Brief',
+        parameters: {
+          legHeight: 'extra-high',
+          rise: 'high',
+          waistband: 'elastic-encased'
+        }
+      }
+    },
+    {
+      id: 'brief-swim-racer',
+      name: 'Competitive Swim Brief',
+      category: 'briefs',
+      description: 'Tight fitting, low drag brief for competitive swimming.',
+      tags: ['brief', 'swim', 'competitive', 'speed', 'racing'],
+      difficulty: 'intermediate',
+      estimatedTime: '2 hours',
+      fabricRecommendations: ['Chlorine resistant polyester', 'PBT'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'brief-swim-racer',
+        name: 'Swim Racer',
+        parameters: {
+          drag: 'low',
+          drawstring: true,
+          lining: 'front-only',
+          sideSeam: 30 // minimal
+        }
+      }
+    },
+    {
+      id: 'brief-pouch-enhanced',
+      name: 'Pouch Enhanced Brief',
+      category: 'briefs',
+      description: 'Anatomically contoured pouch for maximum comfort and enhancement.',
+      tags: ['brief', 'pouch', 'enhanced', 'comfort', 'contour'],
+      difficulty: 'intermediate',
+      estimatedTime: '2.5 hours',
+      fabricRecommendations: ['Modal', 'Bamboo rayon'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'brief-pouch-enhanced',
+        name: 'Pouch Enhanced Brief',
+        parameters: {
+          pouchVolume: 'extra',
+          seamShape: 'u-shape',
+          forwardProjection: true
+        }
+      }
+    },
+    {
+      id: 'brief-seamless-micro',
+      name: 'Seamless Micro Brief',
+      category: 'briefs',
+      description: 'Minimalist brief with bonded edges for no visible panty line.',
+      tags: ['brief', 'seamless', 'micro', 'invisible', 'smooth'],
+      difficulty: 'advanced', // Requires bonding equipment/glue
+      estimatedTime: '2 hours',
+      fabricRecommendations: ['Laser cut microfiber', 'Bonding tape'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'brief-seamless-micro',
+        name: 'Seamless Micro Brief',
+        parameters: {
+          seams: 'none', // bonded
+          fabricEdge: 'raw-cut',
+          rise: 'low'
+        }
+      }
+    },
+    {
+      id: 'brief-thermal-base',
+      name: 'Thermal Base Layer Brief',
+      category: 'briefs',
+      description: 'Warm, insulating brief for cold weather base layering.',
+      tags: ['brief', 'thermal', 'warm', 'base-layer', 'winter'],
+      difficulty: 'beginner',
+      estimatedTime: '1.5 hours',
+      fabricRecommendations: ['Merino wool', 'Thermal waffle knit'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'brief-thermal-base',
+        name: 'Thermal Brief',
+        parameters: {
+          insulation: 'medium',
+          rise: 'mid',
+          fly: 'functional'
+        }
+      }
+    },
+    {
+      id: 'brief-retro-fly',
+      name: 'Retro Fly Front Brief',
+      category: 'briefs',
+      description: 'Vintage styled brief with a functional button fly.',
+      tags: ['brief', 'retro', 'fly', 'button', 'vintage'],
+      difficulty: 'intermediate',
+      estimatedTime: '2.5 hours',
+      fabricRecommendations: ['Cotton lawn', 'Lightweight jersey'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'brief-retro-fly',
+        name: 'Retro Fly Brief',
+        parameters: {
+          flyType: 'button',
+          buttonCount: 2,
+          waistband: 'gathered'
+        }
+      }
+    },
+    {
+      id: 'brief-side-tie-swim',
+      name: 'Side Tie Swim Brief',
+      category: 'briefs',
+      description: 'Adjustable swim brief with ties at both hips.',
+      tags: ['brief', 'swim', 'beach', 'adjustable', 'tie-side'],
+      difficulty: 'advanced', // Construction of ties can be tricky
+      estimatedTime: '2 hours',
+      fabricRecommendations: ['Swimspandex', 'Lycra'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'brief-side-tie-swim',
+        name: 'Side Tie Brief',
+        parameters: {
+          sideStyle: 'tie',
+          coverage: 'scanty',
+          lining: 'full'
+        }
+      }
+    },
+    {
+      id: 'brief-high-waist-control',
+      name: 'High Waist Control Brief',
+      category: 'briefs',
+      description: 'High-waisted brief offering light tummy control.',
+      tags: ['brief', 'high-waist', 'control', 'shapewear', 'womens'],
+      difficulty: 'intermediate',
+      estimatedTime: '2.5 hours',
+      fabricRecommendations: ['Power mesh', 'Firm spandex'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'brief-high-waist-control',
+        name: 'Control Brief',
+        parameters: {
+          rise: 'ultra-high',
+          controlPanel: 'front',
+          legCut: 'low'
+        }
+      }
+    },
+    {
+      id: 'brief-cheeky-cut',
+      name: 'Cheeky Cut Brief',
+      category: 'briefs',
+      description: 'Brief with a gathered back seam to accentuate the glutes.',
+      tags: ['brief', 'cheeky', 'ruched', 'flattering', 'fun'],
+      difficulty: 'intermediate',
+      estimatedTime: '2 hours',
+      fabricRecommendations: ['Soft lace', 'Jersey'],
+      requiredMeasurements: ['waist', 'hip'],
+      spec: {
+        id: 'brief-cheeky-cut',
+        name: 'Cheeky Brief',
+        parameters: {
+          backSeam: 'ruched',
+          coverage: 'cheeky',
+          rise: 'low'
+        }
+      }
     }
   ];
 }

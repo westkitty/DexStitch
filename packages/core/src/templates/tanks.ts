@@ -113,6 +113,206 @@ export function getTankTemplates(): GarmentTemplate[] {
           looseFit: true
         }
       }
+    },
+    {
+      id: 'tank-stringer-bodybuilding',
+      name: 'Pro Bodybuilding Stringer',
+      category: 'tanks',
+      description: 'The thinnest straps possible. Minimal coverage for maximal flex.',
+      tags: ['tank', 'stringer', 'pro', 'bodybuilding', 'minimal'],
+      difficulty: 'beginner',
+      estimatedTime: '1.5 hours',
+      fabricRecommendations: ['Cotton/Spandex', 'Rayon'],
+      requiredMeasurements: ['chest', 'waist'],
+      spec: {
+        id: 'tank-stringer-bodybuilding',
+        name: 'Pro Stringer',
+        parameters: {
+          strapWidth: 10, // extremely thin
+          nippleExposure: 'possible',
+          hem: 'raw-edge'
+        }
+      }
+    },
+    {
+      id: 'tank-racerback-running',
+      name: 'Running Racerback',
+      category: 'tanks',
+      description: 'Lightweight runner\'s tank with reflective details.',
+      tags: ['tank', 'running', 'racerback', 'cardio', 'reflective'],
+      difficulty: 'intermediate',
+      estimatedTime: '2.5 hours',
+      fabricRecommendations: ['Micro-mesh', 'Dri-fit'],
+      requiredMeasurements: ['chest', 'waist'],
+      spec: {
+        id: 'tank-racerback-running',
+        name: 'Run Racerback',
+        parameters: {
+          reflectivestrips: true,
+          ventilation: 'back-panel',
+          chafing: 'zero'
+        }
+      }
+    },
+    {
+      id: 'tank-muscle-deep-cut',
+      name: 'Deep Cut Muscle Tank',
+      category: 'tanks',
+      description: 'Side openings extend down to the waist. Great for showing off obliques.',
+      tags: ['tank', 'muscle', 'deep-cut', 'side-boob', 'gym'],
+      difficulty: 'beginner',
+      estimatedTime: '1.5 hours',
+      fabricRecommendations: ['Variable knit', 'Slub cotton'],
+      requiredMeasurements: ['chest', 'waist'],
+      spec: {
+        id: 'tank-muscle-deep-cut',
+        name: 'Deep Cut Muscle',
+        parameters: {
+          sideDrop: 'waist-level',
+          neckline: 'crew',
+          fit: 'box'
+        }
+      }
+    },
+    {
+      id: 'tank-crop-mesh',
+      name: 'Mesh Crop Tank',
+      category: 'tanks',
+      description: 'Cropped length tank made entirely of mesh.',
+      tags: ['tank', 'crop', 'mesh', 'party', 'breathable'],
+      difficulty: 'beginner',
+      estimatedTime: '1 hour',
+      fabricRecommendations: ['Large gauge mesh', 'Fishnet'],
+      requiredMeasurements: ['chest', 'waist'],
+      spec: {
+        id: 'tank-crop-mesh',
+        name: 'Mesh Crop',
+        parameters: {
+          length: 'crop-rib',
+          edgeFinish: 'binding',
+          sheer: true
+        }
+      }
+    },
+    {
+      id: 'tank-ribbed-undershirt',
+      name: 'Classic Ribbed Undershirt',
+      category: 'tanks',
+      description: 'The standard "wife beater" style tank. Form fitting ribbed cotton.',
+      tags: ['tank', 'undershirt', 'ribbed', 'classic', 'layering'],
+      difficulty: 'beginner',
+      estimatedTime: '1.5 hours',
+      fabricRecommendations: ['2x1 Cotton Rib'],
+      requiredMeasurements: ['chest', 'waist'],
+      spec: {
+        id: 'tank-ribbed-undershirt',
+        name: 'Ribbed Tank',
+        parameters: {
+          fit: 'tight',
+          fabricStretch: 'high',
+          binding: 'self-fabric'
+        }
+      }
+    },
+    {
+      id: 'tank-square-neck-retro',
+      name: 'Square Neck Retro Tank',
+      category: 'tanks',
+      description: 'Vintage style tank with a squared-off neckline.',
+      tags: ['tank', 'retro', 'square-neck', '70s', 'vintage'],
+      difficulty: 'intermediate',
+      estimatedTime: '2 hours',
+      fabricRecommendations: ['Terry cloth', 'Velour'],
+      requiredMeasurements: ['chest', 'waist'],
+      spec: {
+        id: 'tank-square-neck-retro',
+        name: 'Square Neck Tank',
+        parameters: {
+          neckShape: 'square',
+          strapstyle: 'wide',
+          fit: 'slim'
+        }
+      }
+    },
+    {
+      id: 'tank-asymmetric-strap',
+      name: 'Asymmetric Strap Tank',
+      category: 'tanks',
+      description: 'Avant-garde tank with uneven strap widths or placement.',
+      tags: ['tank', 'fashion', 'asymmetric', 'modern', 'edgy'],
+      difficulty: 'advanced',
+      estimatedTime: '3 hours',
+      fabricRecommendations: ['Jersey', 'Modal'],
+      requiredMeasurements: ['chest', 'waist'],
+      spec: {
+        id: 'tank-asymmetric-strap',
+        name: 'Asymmetric Tank',
+        parameters: {
+          strapLeft: 'thin',
+          strapRight: 'wide',
+          neckline: 'slant'
+        }
+      }
+    },
+    {
+      id: 'tank-hooded-sleeveless',
+      name: 'Hooded Muscle Tank',
+      category: 'tanks',
+      description: 'Sleeveless tank with an attached hood. popular gym cover-up.',
+      tags: ['tank', 'hooded', 'gym', 'cover-up', 'urban'],
+      difficulty: 'intermediate',
+      estimatedTime: '3.5 hours',
+      fabricRecommendations: ['French Terry', 'Lightweight fleece'],
+      requiredMeasurements: ['chest', 'waist', 'neck'],
+      spec: {
+        id: 'tank-hooded-sleeveless',
+        name: 'Hooded Tank',
+        parameters: {
+          hood: 'lined',
+          pocket: 'kangaroo',
+          armhole: 'raw'
+        }
+      }
+    },
+    {
+      id: 'tank-compression-base',
+      name: 'Compression Base Tank',
+      category: 'tanks',
+      description: 'Tight base layer tank for core support and moisture management.',
+      tags: ['tank', 'compression', 'base-layer', 'sport', 'support'],
+      difficulty: 'intermediate',
+      estimatedTime: '2 hours',
+      fabricRecommendations: ['Spandex', 'Compression knit'],
+      requiredMeasurements: ['chest', 'waist'],
+      spec: {
+        id: 'tank-compression-base',
+        name: 'Compression Tank',
+        parameters: {
+          fit: 'skin-tight',
+          length: 'extra-long', // to tuck in
+          seams: 'flatlock'
+        }
+      }
+    },
+    {
+      id: 'tank-loose-beach',
+      name: 'Loose Fit Beach Tank',
+      category: 'tanks',
+      description: 'Flowy, oversized tank for throwing over swimwear.',
+      tags: ['tank', 'beach', 'loose', 'summer', 'vacation'],
+      difficulty: 'beginner',
+      estimatedTime: '1 hour',
+      fabricRecommendations: ['Linen', 'Voile', 'Tissue jersey'],
+      requiredMeasurements: ['chest'],
+      spec: {
+        id: 'tank-loose-beach',
+        name: 'Beach Tank',
+        parameters: {
+          fit: 'oversized',
+          hem: 'hi-low',
+          drape: 'max'
+        }
+      }
     }
   ];
 }

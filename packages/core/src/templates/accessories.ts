@@ -175,6 +175,206 @@ export function getAccessoryTemplates(): GarmentTemplate[] {
           gripperBottom: true
         }
       }
+    },
+    {
+      id: 'accessory-hood-wrestling',
+      name: 'Wrestling Hood',
+      category: 'accessories',
+      description: 'Lycra hood for warm-up or ring entrance.',
+      tags: ['accessory', 'hood', 'wrestling', 'warm-up', 'costume'],
+      difficulty: 'beginner',
+      estimatedTime: '1 hour',
+      fabricRecommendations: ['Lycra', 'Spandex'],
+      requiredMeasurements: ['neck'],
+      spec: {
+        id: 'accessory-hood-wrestling',
+        name: 'Wrestling Hood',
+        parameters: {
+          faceOpening: 'full',
+          neckLength: 'collarbone',
+          fit: 'snug'
+        }
+      }
+    },
+    {
+      id: 'accessory-kneepad-sleeve',
+      name: 'Wrestling Knee Pad Sleeve',
+      category: 'accessories',
+      description: 'Protective sleeve with padding space for knees.',
+      tags: ['accessory', 'knee-pad', 'wrestling', 'protection', 'joint'],
+      difficulty: 'intermediate',
+      estimatedTime: '2 hours',
+      fabricRecommendations: ['Neoprene', 'Heavy elastic'],
+      requiredMeasurements: ['hip'],
+      spec: {
+        id: 'accessory-kneepad-sleeve',
+        name: 'Knee Pad',
+        parameters: {
+          paddingThickness: 10,
+          length: 250,
+          ventilation: 'back-mesh'
+        }
+      }
+    },
+    {
+      id: 'accessory-elbow-sleeve',
+      name: 'Compression Elbow Sleeve',
+      category: 'accessories',
+      description: 'Supportive sleeve for elbows during heavy lifting.',
+      tags: ['accessory', 'elbow', 'compression', 'lifting', 'support'],
+      difficulty: 'beginner',
+      estimatedTime: '1.5 hours',
+      fabricRecommendations: ['Compression knit', 'Elastic'],
+      requiredMeasurements: [],
+     spec: {
+        id: 'accessory-elbow-sleeve',
+        name: 'Elbow Sleeve',
+        parameters: {
+          compression: 'high',
+          length: 200,
+          contour: 'bent-arm'
+        }
+      }
+    },
+    {
+      id: 'accessory-shin-guard-sleeve',
+      name: 'Shin Guard Sleeve',
+      category: 'accessories',
+      description: 'Fabric sleeve to hold shin guards in place.',
+      tags: ['accessory', 'shin-guard', 'soccer', 'sports', 'protection'],
+      difficulty: 'beginner',
+      estimatedTime: '1 hour',
+      fabricRecommendations: ['Spandex', 'Athletic mesh'],
+      requiredMeasurements: [],
+      spec: {
+        id: 'accessory-shin-guard-sleeve',
+        name: 'Shin Sleeve',
+        parameters: {
+          pocket: 'front-internal',
+          stirrup: true,
+          topGrip: 'silicone'
+        }
+      }
+    },
+    {
+      id: 'accessory-face-mask-sport',
+      name: 'Sport Face Mask',
+      category: 'accessories',
+      description: 'Breathable face covering for training.',
+      tags: ['accessory', 'mask', 'sport', 'face', 'breathable'],
+      difficulty: 'beginner',
+      estimatedTime: '0.5 hours',
+      fabricRecommendations: ['Neoprene', 'Mesh'],
+      requiredMeasurements: ['neck'],
+      spec: {
+        id: 'accessory-face-mask-sport',
+        name: 'Sport Mask',
+        parameters: {
+          earLoops: 'integrated',
+          filterPocket: true,
+          noseWire: true
+        }
+      }
+    },
+    {
+      id: 'accessory-belt-lifting',
+      name: 'Soft Lifting Belt',
+      category: 'accessories',
+      description: 'Fabric weightlifting belt with velcro closure.',
+      tags: ['accessory', 'belt', 'lifting', 'support', 'gym'],
+      difficulty: 'intermediate',
+      estimatedTime: '3 hours',
+      fabricRecommendations: ['Heavy nylon', 'Webbing core'],
+      requiredMeasurements: ['waist'],
+      spec: {
+        id: 'accessory-belt-lifting',
+        name: 'Lifting Belt',
+        parameters: {
+          widthBack: 100,
+          widthFront: 60,
+          closure: 'velcro-wrap'
+        }
+      }
+    },
+    {
+      id: 'accessory-ankle-support',
+      name: 'Ankle Support Wrap',
+      category: 'accessories',
+      description: 'Wrap-around support for weak ankles.',
+      tags: ['accessory', 'ankle', 'support', 'medical', 'sport'],
+      difficulty: 'beginner',
+      estimatedTime: '1.5 hours',
+      fabricRecommendations: ['Elastic bandage', 'Neoprene'],
+      requiredMeasurements: [],
+      spec: {
+        id: 'accessory-ankle-support',
+        name: 'Ankle Wrap',
+        parameters: {
+          style: 'figure-8',
+          closure: 'velcro',
+          heel: 'open'
+        }
+      }
+    },
+    {
+      id: 'accessory-wrist-wrap-heavy',
+      name: 'Heavy Wrist Wrap',
+      category: 'accessories',
+      description: 'Stiff wrist wraps for maximum stability.',
+      tags: ['accessory', 'wrist', 'lifting', 'heavy', 'support'],
+      difficulty: 'beginner',
+      estimatedTime: '1 hour',
+      fabricRecommendations: ['Heavy elastic', 'Canvas'],
+      requiredMeasurements: [],
+      spec: {
+        id: 'accessory-wrist-wrap-heavy',
+        name: 'Wrist Wrap',
+        parameters: {
+          length: 500,
+          width: 80,
+          thumbLoop: true
+        }
+      }
+    },
+    {
+      id: 'accessory-sweatband-head',
+      name: 'Tapered Head Tie',
+      category: 'accessories',
+      description: 'Tie-back headband for tennis and running.',
+      tags: ['accessory', 'headband', 'tennis', 'ninja', 'tie'],
+      difficulty: 'beginner',
+      estimatedTime: '0.5 hours',
+      fabricRecommendations: ['Dri-fit', 'Microfiber'],
+      requiredMeasurements: ['neck'],
+      spec: {
+        id: 'accessory-sweatband-head',
+        name: 'Head Tie',
+        parameters: {
+          length: 900,
+          taper: 'center-wide',
+          branding: 'front'
+        }
+      }
+    },
+    {
+      id: 'accessory-compression-calf',
+      name: 'Calf Compression Sleeve',
+      category: 'accessories',
+      description: 'Graduated compression sleeve for lower legs.',
+      tags: ['accessory', 'calf', 'compression', 'runner', 'recovery'],
+      difficulty: 'intermediate',
+      estimatedTime: '2 hours',
+      fabricRecommendations: ['Circular knit spandex', 'Compression lycra'],
+      requiredMeasurements: [],
+      spec: {
+        id: 'accessory-compression-calf',
+        name: 'Calf Sleeve',
+        parameters: {
+          compression: '20-30mmHg',
+          length: 'knee-to-ankle',
+          topBand: 'wide'
+        }
+      }
     }
   ];
 }
