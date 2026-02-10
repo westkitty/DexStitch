@@ -327,3 +327,174 @@
     width: 100%;
   }
 }
+
+/* View Mode Selector */
+.view-mode-selector {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.view-mode-btn {
+  padding: 10px 20px;
+  border: 2px solid #e0e0e0;
+  background: white;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 50px;
+}
+
+.view-mode-btn:hover {
+  border-color: #2196f3;
+  background: #e3f2fd;
+}
+
+.view-mode-btn.active {
+  background: #2196f3;
+  color: white;
+  border-color: #2196f3;
+}
+
+/* List View */
+.gallery-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.template-list-item {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.template-list-item:hover {
+  border-color: #2196f3;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
+}
+
+.list-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.list-item-header h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.list-item-description {
+  color: #666;
+  font-size: 0.95rem;
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+}
+
+.list-item-footer {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.difficulty-badge.small {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+}
+
+/* Categories View */
+.gallery-categories {
+  margin-bottom: 40px;
+}
+
+.category-section {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  cursor: pointer;
+  background: #f8f9fa;
+  transition: background 0.2s;
+  user-select: none;
+}
+
+.category-header:hover {
+  background: #e9ecef;
+}
+
+.category-toggle {
+  font-size: 0.8rem;
+  color: #666;
+  width: 16px;
+  text-align: center;
+}
+
+.category-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+  flex: 1;
+  text-transform: capitalize;
+}
+
+.category-count {
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.category-templates {
+  padding: 12px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.category-template-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #f8f9fa;
+}
+
+.category-template-item:hover {
+  background: #e3f2fd;
+  transform: translateX(4px);
+}
+
+.template-name {
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.difficulty-badge.mini {
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: 700;
+}

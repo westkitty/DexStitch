@@ -7,7 +7,8 @@ import DesignView from "./views/DesignView";
 import LayoutView from "./views/LayoutView";
 import EmbroideryView from "./views/EmbroideryView";
 import ExportView from "./views/ExportView";
-import { TemplatesView } from "./views/TemplatesView";
+import { DashboardView } from "./views/DashboardView";
+import { TemplateGallery } from "./components/TemplateGallery";
 import { ProjectProvider, createDefaultProject, useProject } from "./state";
 import { loadProject, saveProject } from "./db";
 import { createCollaborationManager, type CollabStatus } from "./collaboration";
@@ -15,7 +16,8 @@ import { createCollaborationManager, type CollabStatus } from "./collaboration";
 function AppShell() {
   const { project, setProject, updateMeasurements, updatePatternSpec, setEmbroidery } =
     useProject();
-  const [activeTab, setActiveTab] = useState("templates");
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [templateDrawerOpen, setTemplateDrawerOpen] = useState(false);
   const [collabStatus, setCollabStatus] = useState<CollabStatus>({
     connected: false,
     status: 'disconnected',
@@ -129,18 +131,43 @@ function AppShell() {
 
   const tabs = useMemo(
     () => [
-      { id: "templates", label: "📚 Templates" },
-      { id: "measurements", label: "Measurements" },
-      { id: "design", label: "Design" },
-      { id: "layout", label: "Layout" },
-      { id: "embroidery", label: "Embroidery" },
-      { id: "export", label: "Export" }
+      { id: "dashboard", label: "🏠 Dashboard" },
+      { id: "measurements", label: "📏 Measurements" },
+      { id: "design", label: "✂️ Design" },
+      { id: "layout", label: "📦 Layout" },
+      { id: "embroidery", label: "🎨 Embroidery" },
+      { id: "export", label: "💾 Export" }
     ],
     []
   );
 
+  const handleSelectTemplate = (spec: PatternSpec) => {
+    updatePatternSpec(spec);
+    setTemplateDrawerOpen(false);
+    setActiveTab("measurements");
+  };
+
   return (
     <div className="app-shell">
+      {templateDrawerOpen && (
+        <div className="drawer-overlay" onClick={() => setTemplateDrawerOpen(false)}>
+          <div className="template-drawer" onClick={(e) => e.stopPropagation()}>
+            <div className="drawer-header">
+              <h2>📚 Template Library</h2>
+              <button 
+                className="drawer-close"
+                onClick={() => setTemplateDrawerOpen(false)}
+              >
+                ✕
+              </button>
+            </div>
+            <div className="drawer-content">
+              <TemplateGallery onSelectTemplate={handleSelectTemplate} />
+            </div>
+          </div>
+        </div>
+      )}
+
       <header>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <img 
@@ -150,9 +177,17 @@ function AppShell() {
           />
           <div>
             <h1 style={{ margin: 0 }}>DexStitch</h1>
-            <p style={{ margin: 0 }}>Local-first pattern and embroidery workstation</p>
+            <p style={{ margin: 0, fontSize: '0.9rem', color: '#666' }}>
+              Local-first pattern and embroidery workstation
+            </p>
           </div>
         </div>
+        <button 
+          className="templates-btn"
+          onClick={() => setTemplateDrawerOpen(true)}
+        >
+          📚 Templates
+        </button>
       </header>
       <main>
         <div className="panel">
@@ -163,14 +198,7 @@ function AppShell() {
             </span>
           </div>
         </div>
-        {activeTab === "templates" && (
-          <TemplatesView
-            onSelectTemplate={(spec: PatternSpec) => {
-              updatePatternSpec(spec);
-              setActiveTab("design");
-            }}
-          />
-        )}
+        {activeTab === "dashboard" && <DashboardView />}
         {activeTab === "measurements" && (
           <MeasurementsView
             measurements={project.measurements}

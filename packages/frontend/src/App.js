@@ -7,13 +7,15 @@ import DesignView from "./views/DesignView";
 import LayoutView from "./views/LayoutView";
 import EmbroideryView from "./views/EmbroideryView";
 import ExportView from "./views/ExportView";
-import { TemplatesView } from "./views/TemplatesView";
+import { DashboardView } from "./views/DashboardView";
+import { TemplateGallery } from "./components/TemplateGallery";
 import { ProjectProvider, createDefaultProject, useProject } from "./state";
 import { loadProject, saveProject } from "./db";
 import { createCollaborationManager } from "./collaboration";
 function AppShell() {
     const { project, setProject, updateMeasurements, updatePatternSpec, setEmbroidery } = useProject();
-    const [activeTab, setActiveTab] = useState("templates");
+    const [activeTab, setActiveTab] = useState("dashboard");
+    const [templateDrawerOpen, setTemplateDrawerOpen] = useState(false);
     const [collabStatus, setCollabStatus] = useState({
         connected: false,
         status: 'disconnected',
@@ -111,17 +113,19 @@ function AppShell() {
         lastLocalUpdateRef.current = Date.now();
     }, [project]);
     const tabs = useMemo(() => [
-        { id: "templates", label: "📚 Templates" },
-        { id: "measurements", label: "Measurements" },
-        { id: "design", label: "Design" },
-        { id: "layout", label: "Layout" },
-        { id: "embroidery", label: "Embroidery" },
-        { id: "export", label: "Export" }
+        { id: "dashboard", label: "🏠 Dashboard" },
+        { id: "measurements", label: "📏 Measurements" },
+        { id: "design", label: "✂️ Design" },
+        { id: "layout", label: "📦 Layout" },
+        { id: "embroidery", label: "🎨 Embroidery" },
+        { id: "export", label: "💾 Export" }
     ], []);
-    return (_jsxs("div", { className: "app-shell", children: [_jsx("header", { children: _jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '16px' }, children: [_jsx("img", { src: "/DexStitchLogo.png", alt: "DexStitch Logo", style: { height: '60px', width: 'auto' } }), _jsxs("div", { children: [_jsx("h1", { style: { margin: 0 }, children: "DexStitch" }), _jsx("p", { style: { margin: 0 }, children: "Local-first pattern and embroidery workstation" })] })] }) }), _jsxs("main", { children: [_jsxs("div", { className: "panel", children: [_jsx(Tabs, { tabs: tabs, activeId: activeTab, onChange: setActiveTab }), _jsx("div", { style: { marginTop: 12 }, children: _jsx("span", { className: "status-pill", children: collabEnabled ? `Collab: ${collabStatus}` : "Local-only mode" }) })] }), activeTab === "templates" && (_jsx(TemplatesView, { onSelectTemplate: (spec) => {
-                            updatePatternSpec(spec);
-                            setActiveTab("design");
-                        } })), activeTab === "measurements" && (_jsx(MeasurementsView, { measurements: project.measurements, patternSpec: project.patternSpec, onMeasurementsChange: updateMeasurements, onPatternSpecChange: updatePatternSpec })), activeTab === "design" && _jsx(DesignView, { pattern: project.pattern }), activeTab === "layout" && (_jsx(LayoutView, { pattern: project.pattern, nesting: project.nesting })), activeTab === "embroidery" && (_jsx(EmbroideryView, { embroidery: project.embroidery, onEmbroideryChange: setEmbroidery })), activeTab === "export" && (_jsx(ExportView, { pattern: project.pattern, nesting: project.nesting, embroidery: project.embroidery.stitchPlan }))] })] }));
+    const handleSelectTemplate = (spec) => {
+        updatePatternSpec(spec);
+        setTemplateDrawerOpen(false);
+        setActiveTab("measurements");
+    };
+    return (_jsxs("div", { className: "app-shell", children: [templateDrawerOpen && (_jsx("div", { className: "drawer-overlay", onClick: () => setTemplateDrawerOpen(false), children: _jsxs("div", { className: "template-drawer", onClick: (e) => e.stopPropagation(), children: [_jsxs("div", { className: "drawer-header", children: [_jsx("h2", { children: "\uD83D\uDCDA Template Library" }), _jsx("button", { className: "drawer-close", onClick: () => setTemplateDrawerOpen(false), children: "\u2715" })] }), _jsx("div", { className: "drawer-content", children: _jsx(TemplateGallery, { onSelectTemplate: handleSelectTemplate }) })] }) })), _jsxs("header", { children: [_jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '16px' }, children: [_jsx("img", { src: "/DexStitchLogo.png", alt: "DexStitch Logo", style: { height: '60px', width: 'auto' } }), _jsxs("div", { children: [_jsx("h1", { style: { margin: 0 }, children: "DexStitch" }), _jsx("p", { style: { margin: 0, fontSize: '0.9rem', color: '#666' }, children: "Local-first pattern and embroidery workstation" })] })] }), _jsx("button", { className: "templates-btn", onClick: () => setTemplateDrawerOpen(true), children: "\uD83D\uDCDA Templates" })] }), _jsxs("main", { children: [_jsxs("div", { className: "panel", children: [_jsx(Tabs, { tabs: tabs, activeId: activeTab, onChange: setActiveTab }), _jsx("div", { style: { marginTop: 12 }, children: _jsx("span", { className: "status-pill", children: collabEnabled ? `Collab: ${collabStatus}` : "Local-only mode" }) })] }), activeTab === "dashboard" && _jsx(DashboardView, {}), activeTab === "measurements" && (_jsx(MeasurementsView, { measurements: project.measurements, patternSpec: project.patternSpec, onMeasurementsChange: updateMeasurements, onPatternSpecChange: updatePatternSpec })), activeTab === "design" && _jsx(DesignView, { pattern: project.pattern }), activeTab === "layout" && (_jsx(LayoutView, { pattern: project.pattern, nesting: project.nesting })), activeTab === "embroidery" && (_jsx(EmbroideryView, { embroidery: project.embroidery, onEmbroideryChange: setEmbroidery })), activeTab === "export" && (_jsx(ExportView, { pattern: project.pattern, nesting: project.nesting, embroidery: project.embroidery.stitchPlan }))] })] }));
 }
 export default function App() {
     return (_jsx(ProjectProvider, { children: _jsx(AppShell, {}) }));
