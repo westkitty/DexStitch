@@ -5,9 +5,9 @@ export function DashboardView() {
   return (
     <div className="dashboard-view">
       <div className="dashboard-hero">
-        <img 
-          src="/DexStitchBanner.png" 
-          alt="DexStitch Banner" 
+        <img
+          src="/DexStitchBanner.jpg"
+          alt="DexStitch Banner"
           className="dashboard-banner"
         />
         <h1 className="dashboard-title">Welcome to DexStitch</h1>
