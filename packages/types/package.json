@@ -2,6 +2,9 @@
   "name": "@dexstitch/types",
   "version": "0.1.0",
   "private": true,
+  "description": "DexStitch shared TypeScript types and interfaces",
+  "author": "WestKitty <https://github.com/westkitty>",
+  "license": "Unlicense",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"

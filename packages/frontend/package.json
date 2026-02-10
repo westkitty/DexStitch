@@ -2,6 +2,9 @@
   "name": "@dexstitch/frontend",
   "version": "0.1.0",
   "private": true,
+  "description": "DexStitch Progressive Web App - Local-first pattern design & embroidery UI",
+  "author": "WestKitty <https://github.com/westkitty>",
+  "license": "Unlicense",
   "type": "module",
   "scripts": {
     "dev": "vite",

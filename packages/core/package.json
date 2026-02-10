@@ -2,6 +2,9 @@
   "name": "@dexstitch/core",
   "version": "0.1.0",
   "private": true,
+  "description": "DexStitch core business logic - pattern generation, nesting, embroidery, AI scanning",
+  "author": "WestKitty <https://github.com/westkitty>",
+  "license": "Unlicense",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
