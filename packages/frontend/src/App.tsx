@@ -129,7 +129,9 @@ function AppShell() {
         {activeTab === "embroidery" && (
           <EmbroideryView embroidery={project.embroidery} onEmbroideryChange={setEmbroidery} />
         )}
-        {activeTab === "export" && <ExportView pattern={project.pattern} />}
+        {activeTab === "export" && (
+          <ExportView pattern={project.pattern} nesting={project.nesting} embroidery={project.embroidery.stitchPlan} />
+        )}
       </main>
     </div>
   );

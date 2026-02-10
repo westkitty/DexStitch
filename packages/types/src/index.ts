@@ -84,6 +84,8 @@ export type NestingOutput = {
   utilizedArea: number;
   /** Total bin area in mm² */
   binArea: number;
+  /** Packing efficiency (0-1): utilizedArea / binArea */
+  efficiency?: number;
 };
 
 export type Stitch = {
@@ -93,9 +95,22 @@ export type Stitch = {
   command: "stitch" | "jump" | "trim" | "stop";
 };
 
+export type ThreadData = {
+  color: { r: number; g: number; b: number };
+  length: number;
+};
+
 export type EmbroideryProgram = {
   stitches: Stitch[];
-  colors: string[];
+  colors?: string[]; // Legacy colors array
+  threadData?: ThreadData[]; // New thread data with colors and lengths
+  metadata?: {
+    stitchCount?: number;
+    jumpCount?: number;
+    estimatedTime?: number;
+    threadLength?: number;
+    needleCount?: number;
+  };
 };
 
 export type MachineProfile = {

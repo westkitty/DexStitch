@@ -4,3 +4,4 @@ export * from "./patternEngine";
 export * from "./nest";
 export * from "./embroideryEngine";
 export * from "./preview";
+export * from "./export";

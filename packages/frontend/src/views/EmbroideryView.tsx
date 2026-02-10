@@ -1,13 +1,19 @@
 import { useState } from "react";
-import { generateStitchPlan, vectorizeImage } from "@dexstitch/core";
+import { vectorizeImage, generateStitches } from "@dexstitch/core";
 import type { EmbroideryData } from "../state";
 
 const defaultOptions = {
-  threshold: 0.5
+  threshold: 128,
+  smoothing: 0.5,
+  simplify: true,
+  minPathLength: 5
 };
 
 const defaultStitchOptions = {
-  stitchLength: 12
+  ecoMode: true,
+  stitchDensity: 0.1,
+  minJumpOptimization: true,
+  maxJumpDistance: 100
 };
 
 type EmbroideryViewProps = {
@@ -43,15 +49,23 @@ export default function EmbroideryView({ embroidery, onEmbroideryChange }: Embro
     }
     ctx.drawImage(image, 0, 0);
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const vectors = await vectorizeImage(imageData, defaultOptions);
-    const stitchPlan = generateStitchPlan(vectors, defaultStitchOptions);
+    
+    try {
+      setStatus("Vectorizing image");
+      const vectors = vectorizeImage(imageData, defaultOptions);
+      
+      setStatus("Generating stitches");
+      const stitchPlan = generateStitches(vectors, defaultStitchOptions);
 
-    onEmbroideryChange({
-      vectors,
-      stitchPlan,
-      imageDataUrl: dataUrl
-    });
-    setStatus("Vectorized");
+      onEmbroideryChange({
+        vectors,
+        stitchPlan,
+        imageDataUrl: dataUrl
+      });
+      setStatus("Vectorized");
+    } catch (error) {
+      setStatus(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   };
 
   return (
@@ -60,9 +74,24 @@ export default function EmbroideryView({ embroidery, onEmbroideryChange }: Embro
       <input type="file" accept="image/*" onChange={handleFile} />
       <p className="status-pill">{status}</p>
       <svg viewBox="0 0 400 240" role="img" aria-label="Embroidery preview">
-        {embroidery.vectors.map((vector, index) => (
-          <path key={index} d={vector.d} fill="none" stroke="#1e293b" />
-        ))}
+        {embroidery.vectors.map((vector, index) => {
+          // Convert point array to SVG path data
+          const pathData = vector.points.length > 0
+            ? `M ${vector.points[0].x} ${vector.points[0].y} ` +
+              vector.points.slice(1).map(p => `L ${p.x} ${p.y}`).join(' ') +
+              (vector.closed ? ' Z' : '')
+            : '';
+          
+          return (
+            <path 
+              key={index} 
+              d={pathData} 
+              fill={vector.type === 'fill' ? '#d1d5db' : 'none'} 
+              stroke="#1e293b" 
+              strokeWidth="0.5"
+            />
+          );
+        })}
         {embroidery.stitchPlan && (
           <polyline
             fill="none"
@@ -75,7 +104,7 @@ export default function EmbroideryView({ embroidery, onEmbroideryChange }: Embro
         )}
       </svg>
       <p>
-        Stitch count: {embroidery.stitchPlan ? embroidery.stitchPlan.stitches.length : 0}
+        Stitch count: {embroidery.stitchPlan?.metadata?.stitchCount ?? embroidery.stitchPlan?.stitches.length ?? 0}
       </p>
     </div>
   );

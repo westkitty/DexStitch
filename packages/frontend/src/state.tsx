@@ -4,12 +4,12 @@ import type {
   MeasurementSet,
   NestingOutput,
   PatternResult,
-  PatternSpec,
-  VectorPath
+  PatternSpec
 } from "@dexstitch/types";
+import type { VectorShape } from "@dexstitch/core";
 
 export type EmbroideryData = {
-  vectors: VectorPath[];
+  vectors: VectorShape[];
   stitchPlan: EmbroideryProgram | null;
   imageDataUrl?: string;
 };
