@@ -139,44 +139,53 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true, au
     return 'poor';
   };
 
-  // Auto-capture when pose is excellent
+  // Update pose quality whenever landmarks change
   useEffect(() => {
     const quality = assessPoseQuality(landmarks);
     setPoseQuality(quality);
-    
-    if (autoCapture && quality === 'excellent' && !countdown && stream) {
-      const now = Date.now();
-      // Prevent multiple captures too close together
-      if (now - lastCaptureRef.current > 5000) {
-        // Start countdown
-        setCountdown(3);
-        const interval = setInterval(() => {
-          setCountdown(prev => {
-            if (prev === null || prev <= 1) {
-              clearInterval(interval);
-              captureFrame();
-              lastCaptureRef.current = Date.now();
-              return null;
-            }
-            return prev - 1;
-          });
-        }, 1000);
-        countdownRef.current = interval;
-      }
-    } else if (quality !== 'excellent' && countdown !== null) {
-      // Cancel countdown if pose degrades
-      if (countdownRef.current) {
-        clearInterval(countdownRef.current);
-      }
-      setCountdown(null);
+  }, [landmarks]);
+
+  // Auto-capture when pose is excellent
+  useEffect(() => {
+    if (!autoCapture || !stream || poseQuality !== 'excellent' || countdown !== null) {
+      return;
     }
+    
+    const now = Date.now();
+    // Prevent multiple captures too close together
+    if (now - lastCaptureRef.current < 5000) {
+      return;
+    }
+    
+    // Start countdown
+    setCountdown(3);
+    const interval = setInterval(() => {
+      setCountdown(prev => {
+        if (prev === null || prev <= 1) {
+          clearInterval(interval);
+          captureFrame();
+          lastCaptureRef.current = Date.now();
+          return null;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    countdownRef.current = interval;
     
     return () => {
       if (countdownRef.current) {
         clearInterval(countdownRef.current);
       }
     };
-  }, [landmarks, autoCapture, countdown, stream]);
+  }, [poseQuality, autoCapture, stream, countdown]);
+  
+  // Cancel countdown if pose degrades
+  useEffect(() => {
+    if (poseQuality !== 'excellent' && countdown !== null && countdownRef.current) {
+      clearInterval(countdownRef.current);
+      setCountdown(null);
+    }
+  }, [poseQuality, countdown]);
 
   // Draw video feed with overlays
   useEffect(() => {
