@@ -108,7 +108,7 @@ export default function MeasurementsView({ measurements, patternSpec, onMeasurem
                                                 } })] })] }), _jsx("p", { className: "status-pill", style: {
                                     backgroundColor: modelReady ? '#90EE90' : '#FFD700',
                                     color: '#000'
-                                }, children: scanStatus })] }), modelReady && (_jsx("div", { style: { marginTop: '16px' }, children: _jsx(CameraCapture, { onFrame: handleScanFrame, landmarks: currentLandmarks, showGuide: true }) })), !modelReady && (_jsxs("div", { style: {
+                                }, children: scanStatus })] }), modelReady && (_jsx("div", { style: { marginTop: '16px' }, children: _jsx(CameraCapture, { onFrame: handleScanFrame, landmarks: currentLandmarks, showGuide: true, autoCapture: true }) })), !modelReady && (_jsxs("div", { style: {
                             textAlign: 'center',
                             padding: '40px',
                             background: 'var(--input-bg)',

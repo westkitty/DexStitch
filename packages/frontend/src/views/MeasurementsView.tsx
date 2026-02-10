@@ -274,6 +274,7 @@ export default function MeasurementsView({
               onFrame={handleScanFrame} 
               landmarks={currentLandmarks}
               showGuide={true}
+              autoCapture={true}
             />
           </div>
         )}
