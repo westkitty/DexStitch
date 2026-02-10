@@ -1,44 +1,80 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
 import { useRef, useState, useEffect } from "react";
 export default function CameraCapture({ onFrame, landmarks, showGuide = true }) {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [stream, setStream] = useState(null);
+    const [error, setError] = useState("");
     const animationRef = useRef();
     const startCamera = async () => {
         if (stream) {
             return;
         }
-        const nextStream = await navigator.mediaDevices.getUserMedia({
-            video: { facingMode: "user" }
-        });
-        setStream(nextStream);
-        if (videoRef.current) {
-            videoRef.current.srcObject = nextStream;
+        try {
+            setError("");
+            const nextStream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: "user",
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                }
+            });
+            setStream(nextStream);
+            if (videoRef.current) {
+                videoRef.current.srcObject = nextStream;
+                // Wait for video to be ready
+                await new Promise((resolve) => {
+                    if (videoRef.current) {
+                        videoRef.current.onloadedmetadata = () => {
+                            videoRef.current?.play();
+                            resolve();
+                        };
+                    }
+                });
+            }
+        }
+        catch (err) {
+            console.error("Camera error:", err);
+            setError(err instanceof Error ? err.message : "Failed to access camera. Please allow camera permissions.");
         }
     };
     const stopCamera = () => {
-        stream?.getTracks().forEach((track) => track.stop());
-        setStream(null);
-        if (videoRef.current) {
-            videoRef.current.srcObject = null;
+        try {
+            stream?.getTracks().forEach((track) => track.stop());
+            setStream(null);
+            if (videoRef.current) {
+                videoRef.current.srcObject = null;
+            }
+            setError("");
+        }
+        catch (err) {
+            console.error("Error stopping camera:", err);
         }
     };
     const captureFrame = () => {
         const video = videoRef.current;
-        if (!video) {
+        if (!video || !video.videoWidth) {
+            setError("Video not ready. Please wait a moment.");
             return;
         }
-        const canvas = document.createElement("canvas");
-        canvas.width = video.videoWidth || 640;
-        canvas.height = video.videoHeight || 480;
-        const context = canvas.getContext("2d");
-        if (!context) {
-            return;
+        try {
+            const canvas = document.createElement("canvas");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const context = canvas.getContext("2d");
+            if (!context) {
+                setError("Failed to get canvas context");
+                return;
+            }
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+            onFrame?.(imageData);
+            setError("");
         }
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-        onFrame?.(imageData);
+        catch (err) {
+            console.error("Capture error:", err);
+            setError("Failed to capture frame");
+        }
     };
     // Draw video feed with overlays
     useEffect(() => {
@@ -134,13 +170,30 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true }) 
             }
         };
     }, [stream, landmarks, showGuide]);
-    return (_jsxs("div", { style: { position: 'relative' }, children: [_jsx("video", { ref: videoRef, autoPlay: true, playsInline: true, muted: true, style: { display: 'none' } }), _jsx("canvas", { ref: canvasRef, style: {
+    return (_jsxs("div", { style: { position: 'relative' }, children: [error && (_jsxs("div", { style: {
+                    padding: '12px',
+                    marginBottom: '12px',
+                    background: '#ff4444',
+                    color: 'white',
+                    borderRadius: '8px',
+                    fontSize: '0.9em'
+                }, children: ["\u26A0\uFE0F ", error] })), _jsx("video", { ref: videoRef, autoPlay: true, playsInline: true, muted: true, style: { display: 'none' } }), _jsx("canvas", { ref: canvasRef, style: {
                     width: '100%',
                     maxWidth: '640px',
                     height: 'auto',
                     borderRadius: 12,
                     marginBottom: 12,
                     display: 'block',
-                    backgroundColor: '#000'
-                } }), _jsxs("div", { style: { display: "flex", gap: 8, flexWrap: "wrap" }, children: [_jsx("button", { className: "primary", type: "button", onClick: startCamera, disabled: !!stream, children: stream ? '✓ Camera Active' : 'Start Camera' }), _jsx("button", { className: "primary", type: "button", onClick: captureFrame, disabled: !stream, children: "Capture Frame" }), _jsx("button", { className: "primary", type: "button", onClick: stopCamera, disabled: !stream, children: "Stop Camera" })] })] }));
+                    backgroundColor: '#000',
+                    minHeight: '400px'
+                } }), _jsxs("div", { style: { display: "flex", gap: 8, flexWrap: "wrap" }, children: [_jsx("button", { className: "primary", type: "button", onClick: startCamera, disabled: !!stream, style: {
+                            cursor: stream ? 'not-allowed' : 'pointer',
+                            opacity: stream ? 0.6 : 1
+                        }, children: stream ? '✓ Camera Active' : 'Start Camera' }), _jsx("button", { className: "primary", type: "button", onClick: captureFrame, disabled: !stream, style: {
+                            cursor: !stream ? 'not-allowed' : 'pointer',
+                            opacity: !stream ? 0.6 : 1
+                        }, children: "Capture Frame" }), _jsx("button", { className: "primary", type: "button", onClick: stopCamera, disabled: !stream, style: {
+                            cursor: !stream ? 'not-allowed' : 'pointer',
+                            opacity: !stream ? 0.6 : 1
+                        }, children: "Stop Camera" })] })] }));
 }

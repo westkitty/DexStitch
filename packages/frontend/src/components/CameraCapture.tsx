@@ -10,44 +10,77 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true }: 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
+  const [error, setError] = useState<string>("");
   const animationRef = useRef<number>();
 
   const startCamera = async () => {
     if (stream) {
       return;
     }
-    const nextStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "user" }
-    });
-    setStream(nextStream);
-    if (videoRef.current) {
-      videoRef.current.srcObject = nextStream;
+    try {
+      setError("");
+      const nextStream = await navigator.mediaDevices.getUserMedia({
+        video: { 
+          facingMode: "user",
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        }
+      });
+      setStream(nextStream);
+      if (videoRef.current) {
+        videoRef.current.srcObject = nextStream;
+        // Wait for video to be ready
+        await new Promise<void>((resolve) => {
+          if (videoRef.current) {
+            videoRef.current.onloadedmetadata = () => {
+              videoRef.current?.play();
+              resolve();
+            };
+          }
+        });
+      }
+    } catch (err) {
+      console.error("Camera error:", err);
+      setError(err instanceof Error ? err.message : "Failed to access camera. Please allow camera permissions.");
     }
   };
 
   const stopCamera = () => {
-    stream?.getTracks().forEach((track) => track.stop());
-    setStream(null);
-    if (videoRef.current) {
-      videoRef.current.srcObject = null;
+    try {
+      stream?.getTracks().forEach((track) => track.stop());
+      setStream(null);
+      if (videoRef.current) {
+        videoRef.current.srcObject = null;
+      }
+      setError("");
+    } catch (err) {
+      console.error("Error stopping camera:", err);
     }
   };
 
   const captureFrame = () => {
     const video = videoRef.current;
-    if (!video) {
+    if (!video || !video.videoWidth) {
+      setError("Video not ready. Please wait a moment.");
       return;
     }
-    const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth || 640;
-    canvas.height = video.videoHeight || 480;
-    const context = canvas.getContext("2d");
-    if (!context) {
-      return;
+    try {
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const context = canvas.getContext("2d");
+      if (!context) {
+        setError("Failed to get canvas context");
+        return;
+      }
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+      onFrame?.(imageData);
+      setError("");
+    } catch (err) {
+      console.error("Capture error:", err);
+      setError("Failed to capture frame");
     }
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-    onFrame?.(imageData);
   };
 
   // Draw video feed with overlays
@@ -161,6 +194,18 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true }: 
 
   return (
     <div style={{ position: 'relative' }}>
+      {error && (
+        <div style={{
+          padding: '12px',
+          marginBottom: '12px',
+          background: '#ff4444',
+          color: 'white',
+          borderRadius: '8px',
+          fontSize: '0.9em'
+        }}>
+          ⚠️ {error}
+        </div>
+      )}
       <video
         ref={videoRef}
         autoPlay
@@ -177,17 +222,45 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true }: 
           borderRadius: 12, 
           marginBottom: 12,
           display: 'block',
-          backgroundColor: '#000'
+          backgroundColor: '#000',
+          minHeight: '400px'
         }}
       />
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-        <button className="primary" type="button" onClick={startCamera} disabled={!!stream}>
+        <button 
+          className="primary" 
+          type="button" 
+          onClick={startCamera} 
+          disabled={!!stream}
+          style={{ 
+            cursor: stream ? 'not-allowed' : 'pointer',
+            opacity: stream ? 0.6 : 1
+          }}
+        >
           {stream ? '✓ Camera Active' : 'Start Camera'}
         </button>
-        <button className="primary" type="button" onClick={captureFrame} disabled={!stream}>
+        <button 
+          className="primary" 
+          type="button" 
+          onClick={captureFrame} 
+          disabled={!stream}
+          style={{ 
+            cursor: !stream ? 'not-allowed' : 'pointer',
+            opacity: !stream ? 0.6 : 1
+          }}
+        >
           Capture Frame
         </button>
-        <button className="primary" type="button" onClick={stopCamera} disabled={!stream}>
+        <button 
+          className="primary" 
+          type="button" 
+          onClick={stopCamera} 
+          disabled={!stream}
+          style={{ 
+            cursor: !stream ? 'not-allowed' : 'pointer',
+            opacity: !stream ? 0.6 : 1
+          }}
+        >
           Stop Camera
         </button>
       </div>
