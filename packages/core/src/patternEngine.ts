@@ -132,11 +132,16 @@ function generateBasicPattern(measurements: MeasurementSet, spec: PatternSpec): 
  * Generate a wrestling singlet pattern with shaped legs and straps
  */
 function generateSingletPattern(measurements: MeasurementSet, spec: PatternSpec): PatternResult {
-  const { chest, waist, hip, height } = measurements;
-  const { ease = 0.95, legHeight = 180, neckDepth = 120, backCut = 100, strapWidth = 50 } = spec.parameters as any;
+  const { chest, hip, height } = measurements;
+  const { ease = 0.95, legHeight = 180, neckDepth = 120, backCut = 100, strapWidth = 50 } = spec.parameters as {
+    ease?: number;
+    legHeight?: number;
+    neckDepth?: number;
+    backCut?: number;
+    strapWidth?: number;
+  };
   
   const bodyWidth = (chest / 2) * ease;
-  const waistWidth = (waist / 2) * ease;
   const hipWidth = (hip / 2) * ease;
   const torsoHeight = height * 0.6; // Singlet covers 60% of height
   
@@ -196,7 +201,12 @@ function generateSingletPattern(measurements: MeasurementSet, spec: PatternSpec)
  */
 function generateTankPattern(measurements: MeasurementSet, spec: PatternSpec): PatternResult {
   const { chest, waist } = measurements;
-  const { ease = 1.05, armholeDepth = 220, neckDepth = 140, strapWidth = 50 } = spec.parameters as any;
+  const { ease = 1.05, armholeDepth = 220, neckDepth = 140, strapWidth = 50 } = spec.parameters as {
+    ease?: number;
+    armholeDepth?: number;
+    neckDepth?: number;
+    strapWidth?: number;
+  };
   
   const bodyWidth = (chest / 2) * ease;
   const tankHeight = (waist / 2) * 1.5; // Tank is shorter
@@ -234,7 +244,10 @@ function generateTankPattern(measurements: MeasurementSet, spec: PatternSpec): P
  */
 function generateHarnessPattern(measurements: MeasurementSet, spec: PatternSpec): PatternResult {
   const { chest, waist } = measurements;
-  const { strapWidth = 30, oRingSize = 50 } = spec.parameters as any;
+  const { strapWidth = 30, oRingSize = 50 } = spec.parameters as {
+    strapWidth?: number;
+    oRingSize?: number;
+  };
   
   const chestCirc = chest;
   const strapLength = chestCirc * 0.4;
@@ -281,7 +294,9 @@ function generateHarnessPattern(measurements: MeasurementSet, spec: PatternSpec)
  */
 function generateJockstrapPattern(measurements: MeasurementSet, spec: PatternSpec): PatternResult {
   const { waist, hip } = measurements;
-  const { waistbandWidth = 40, pouchStyle = 'contoured', legStrapWidth = 20 } = spec.parameters as any;
+  const { waistbandWidth = 40 } = spec.parameters as {
+    waistbandWidth?: number;
+  };
   
   const pouchWidth = hip * 0.15;
   const pouchHeight = hip * 0.2;
@@ -330,8 +345,10 @@ function generateJockstrapPattern(measurements: MeasurementSet, spec: PatternSpe
  * Generate a brief pattern
  */
 function generateBriefPattern(measurements: MeasurementSet, spec: PatternSpec): PatternResult {
-  const { waist, hip } = measurements;
-  const { ease = 1.05, rise = 'mid', legCut = 'standard' } = spec.parameters as any;
+  const { hip } = measurements;
+  const { ease = 1.05 } = spec.parameters as {
+    ease?: number;
+  };
   
   const briefWidth = (hip / 2) * ease;
   const briefHeight = hip * 0.35;
@@ -365,12 +382,13 @@ function generateBriefPattern(measurements: MeasurementSet, spec: PatternSpec): 
  * Generate a bodysuit pattern
  */
 function generateBodysuitPattern(measurements: MeasurementSet, spec: PatternSpec): PatternResult {
-  const { chest, waist, hip, height } = measurements;
-  const { ease = 1.0, sleeves = 'none', legLength = 'brief' } = spec.parameters as any;
+  const { chest, height } = measurements;
+  const { ease = 1.0 } = spec.parameters as {
+    ease?: number;
+  };
   
   const bodyWidth = (chest / 2) * ease;
   const bodyHeight = height * 0.55;
-  const waistWidth = (waist / 2) * ease;
   
   // Full bodysuit front piece
   const frontOutline: Point2D[] = [
@@ -406,8 +424,10 @@ function generateBodysuitPattern(measurements: MeasurementSet, spec: PatternSpec
  * Generate shorts pattern
  */
 function generateShortsPattern(measurements: MeasurementSet, spec: PatternSpec): PatternResult {
-  const { waist, hip } = measurements;
-  const { inseam = 150, waistbandType = 'elastic' } = spec.parameters as any;
+  const { hip } = measurements;
+  const { inseam = 150 } = spec.parameters as {
+    inseam?: number;
+  };
   
   const shortsWidth = (hip / 2) * 1.1;
   const shortsHeight = inseam * 1.3;
@@ -440,8 +460,10 @@ function generateShortsPattern(measurements: MeasurementSet, spec: PatternSpec):
  * Generate leggings pattern
  */
 function generateLeggingsPattern(measurements: MeasurementSet, spec: PatternSpec): PatternResult {
-  const { waist, hip, height } = measurements;
-  const { ease = 1.0, length = 'full', waist: waistType = 'mid' } = spec.parameters as any;
+  const { hip, height } = measurements;
+  const { ease = 1.0 } = spec.parameters as {
+    ease?: number;
+  };
   
   const legWidth = (hip / 2) * ease;
   const legHeight = height * 0.9;
@@ -475,7 +497,10 @@ function generateLeggingsPattern(measurements: MeasurementSet, spec: PatternSpec
  * Generate accessory pattern (simple shapes)
  */
 function generateAccessoryPattern(measurements: MeasurementSet, spec: PatternSpec): PatternResult {
-  const { width = 80, length = 200 } = spec.parameters as any;
+  const { width = 80, length = 200 } = spec.parameters as {
+    width?: number;
+    length?: number;
+  };
   
   const outline: Point2D[] = [
     { x: 0, y: 0 },

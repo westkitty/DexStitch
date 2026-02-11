@@ -1,10 +1,10 @@
-import { describe, test, expect, beforeAll } from 'vitest';
+import { describe, test, expect } from 'vitest';
 import { vectorizeImage, generateStitches } from '../embroideryEngine';
 import type { VectorShape } from '../embroideryEngine';
 
 // Polyfill ImageData for Node.js test environment
 if (typeof ImageData === 'undefined') {
-  global.ImageData = class ImageData {
+  globalThis.ImageData = class ImageData {
     data: Uint8ClampedArray;
     width: number;
     height: number;
@@ -20,7 +20,7 @@ if (typeof ImageData === 'undefined') {
         this.data = new Uint8ClampedArray(this.width * this.height * 4);
       }
     }
-  } as any;
+  } as typeof ImageData;
 }
 
 describe('Embroidery Engine', () => {

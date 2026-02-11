@@ -13,7 +13,7 @@ import type { MeasurementSet, PatternSpec, ProjectData } from '@dexstitch/types'
 
 // Polyfill ImageData for Node.js test environment
 if (typeof ImageData === 'undefined') {
-  global.ImageData = class ImageData {
+  globalThis.ImageData = class ImageData {
     data: Uint8ClampedArray;
     width: number;
     height: number;
@@ -29,7 +29,7 @@ if (typeof ImageData === 'undefined') {
         this.data = new Uint8ClampedArray(this.width * this.height * 4);
       }
     }
-  } as any;
+  } as typeof ImageData;
 }
 
 /**
@@ -112,7 +112,7 @@ describe('User Journey Simulations', () => {
         hip: 850
       };
 
-      const pattern = generatePattern(measurements, {
+      generatePattern(measurements, {
         id: 'embroidered-shirt',
         name: 'Embroidered Shirt',
         parameters: { ease: 1.05, dartDepth: 0 }
@@ -724,16 +724,19 @@ describe('User Journey Simulations', () => {
         hip: 0
       };
 
-      let firstAttempt;
-      try {
-        firstAttempt = generatePattern(badMeasurements, {
-          id: 'recovery-test',
-          name: 'Recovery Test',
-          parameters: { ease: 1.0, dartDepth: 0 }
-        });
-      } catch (error) {
-        firstAttempt = null;
-      }
+      const firstAttempt = (() => {
+        try {
+          return generatePattern(badMeasurements, {
+            id: 'recovery-test',
+            name: 'Recovery Test',
+            parameters: { ease: 1.0, dartDepth: 0 }
+          });
+        } catch (error) {
+          return null;
+        }
+      })();
+
+      expect(firstAttempt).not.toBeUndefined();
 
       // Step 2: User corrects measurements
       const goodMeasurements: MeasurementSet = {

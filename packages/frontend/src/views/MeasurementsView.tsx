@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { estimateMeasurementsFromPose } from "@dexstitch/core";
+import type { PoseLandmark } from "@dexstitch/core";
 import { getPoseEstimator, disposePoseEstimator } from "../ml/poseEstimator";
 import CameraCapture from "../components/CameraCapture";
+import RotationScan from "../components/RotationScan";
+import DualUnitInput from "../components/DualUnitInput";
 import type { MeasurementSet, PatternSpec } from "@dexstitch/types";
 
 type MeasurementsViewProps = {
@@ -17,10 +20,19 @@ export default function MeasurementsView({
   onMeasurementsChange,
   onPatternSpecChange
 }: MeasurementsViewProps) {
+  const mmToIn = (mm: number) => mm / 25.4;
+  const formatInches = (mm: number) => `${mmToIn(mm).toFixed(2)} in`;
+  const formatFeetInches = (mm: number) => {
+    const totalInches = mmToIn(mm);
+    const feet = Math.floor(totalInches / 12);
+    const inches = Math.round(totalInches % 12);
+    return `${feet}'${inches}"`;
+  };
   const [scanStatus, setScanStatus] = useState("Loading ML model...");
   const [referencHeight, setReferenceHeight] = useState(measurements.height);
   const [modelReady, setModelReady] = useState(false);
-  const [currentLandmarks, setCurrentLandmarks] = useState<Array<{x: number, y: number, z?: number, visibility?: number}>>([]);
+  const [currentLandmarks, setCurrentLandmarks] = useState<PoseLandmark[]>([]);
+  const [scanMode, setScanMode] = useState<'camera' | 'rotation'>('camera');
 
   // Initialize pose estimator on component mount
   useEffect(() => {
@@ -91,22 +103,83 @@ export default function MeasurementsView({
     }
   };
 
+  const handleRotationScanComplete = async (frames: Array<{ timestamp: number; imageData: ImageData; landmarks: PoseLandmark[] }>) => {
+    if (frames.length === 0) {
+      setScanStatus("No frames captured");
+      return;
+    }
+
+    try {
+      setScanStatus(`Processing ${frames.length} frames from 360° scan...`);
+
+      // Average measurements from all frame samples
+      const allEstimates: { [key: string]: number[] } = {};
+      const estimator = getPoseEstimator();
+
+      for (const frame of frames) {
+        try {
+          // Get measurements from this frame
+          const landmarks = frame.landmarks.length > 0 ? frame.landmarks : await estimator.estimatePose(frame.imageData);
+          
+          if (landmarks.length === 0) continue;
+
+          const estimates = estimateMeasurementsFromPose(landmarks, {
+            referenceHeight: referencHeight,
+            minConfidence: 0.5
+          });
+
+          for (const estimate of estimates) {
+            if (estimate.confidence > 0.5) {
+              if (!allEstimates[estimate.name]) {
+                allEstimates[estimate.name] = [];
+              }
+              allEstimates[estimate.name].push(estimate.value);
+            }
+          }
+        } catch (err) {
+          console.error("Frame processing error:", err);
+          continue;
+        }
+      }
+
+      // Average all measurements
+      const updates: Partial<MeasurementSet> = {};
+      const measurementCount = Object.keys(allEstimates).length;
+      
+      for (const [name, values] of Object.entries(allEstimates)) {
+        if (values.length > 0) {
+          const average = values.reduce((a, b) => a + b, 0) / values.length;
+          updates[name as keyof MeasurementSet] = average;
+        }
+      }
+
+      // Update landmarks with the last frame for visualization
+      setCurrentLandmarks(frames[frames.length - 1].landmarks);
+      setScanStatus(`✓ Complete! Averaged ${measurementCount} measurements from 360° scan`);
+      onMeasurementsChange(updates);
+      
+      // Switch back to camera mode
+      setTimeout(() => setScanMode('camera'), 2000);
+    } catch (error) {
+      setScanStatus(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Rotation scan error:", error);
+    }
+  };
+
   return (
     <div className="panel">
       <h2 className="section-title">Measurements</h2>
       <div className="form-grid">
         {Object.entries(measurements).map(([key, value]) => (
-          <div key={key}>
-            <label htmlFor={`measurement-${key}`}>{key} (mm)</label>
-            <input
-              id={`measurement-${key}`}
-              type="number"
-              value={value}
-              onChange={(event) =>
-                onMeasurementsChange({ [key]: Number(event.target.value) })
-              }
-            />
-          </div>
+          <DualUnitInput
+            key={key}
+            id={`measurement-${key}`}
+            label={key}
+            value={value}
+            onChange={(newValue) =>
+              onMeasurementsChange({ [key]: newValue })
+            }
+          />
         ))}
         <div>
           <label htmlFor="pattern-ease">ease</label>
@@ -125,23 +198,20 @@ export default function MeasurementsView({
             }
           />
         </div>
-        <div>
-          <label htmlFor="pattern-dart">dart depth (mm)</label>
-          <input
-            id="pattern-dart"
-            type="number"
-            step="5"
-            value={patternSpec.parameters.dartDepth || 0}
-            onChange={(event) =>
-              onPatternSpecChange({
-                parameters: {
-                  ...patternSpec.parameters,
-                  dartDepth: Number(event.target.value)
-                }
-              })
-            }
-          />
-        </div>
+        <DualUnitInput
+          id="pattern-dart"
+          label="dart depth"
+          value={patternSpec.parameters.dartDepth || 0}
+          onChange={(newValue) =>
+            onPatternSpecChange({
+              parameters: {
+                ...patternSpec.parameters,
+                dartDepth: newValue
+              }
+            })
+          }
+          step={5}
+        />
       </div>
       <div style={{ marginTop: 20 }}>
         <h3 className="section-title">Body Scanner (AI-Powered Measurements)</h3>
@@ -155,7 +225,7 @@ export default function MeasurementsView({
         }}>
           <h4 style={{ margin: '0 0 12px 0', color: 'var(--highlight)' }}>📸 How to Use the Scanner:</h4>
           <ol style={{ margin: 0, paddingLeft: '20px', lineHeight: '1.8' }}>
-            <li><strong>Enter your height</strong> in millimeters (e.g., 1750mm for 5'9")</li>
+            <li><strong>Enter your height</strong> in millimeters (e.g., 1750mm / 68.9in)</li>
             <li><strong>Click "Start Camera"</strong> to enable your webcam</li>
             <li><strong>Position yourself</strong> in the camera frame:
               <ul style={{ marginTop: '8px', marginBottom: '8px' }}>
@@ -177,7 +247,7 @@ export default function MeasurementsView({
         
         <div className="scan-controls">
           <div>
-            <label htmlFor="ref-height">Your Height:</label>
+            <label htmlFor="ref-height">Your Height (mm / in):</label>
             <select
               id="ref-height"
               value={referencHeight}
@@ -237,11 +307,12 @@ export default function MeasurementsView({
               }}>
                 Selected: {referencHeight}mm
                 {' '}({(referencHeight / 10).toFixed(1)}cm)
-                {' '}({Math.floor(referencHeight / 304.8)}'{Math.round((referencHeight % 304.8) / 25.4)}")
+                {' '}({formatInches(referencHeight)})
+                {' '}({formatFeetInches(referencHeight)})
               </div>
             )}
             <div style={{ marginTop: '8px' }}>
-              <label htmlFor="custom-height" style={{ fontSize: '0.9em' }}>Or enter custom (mm):</label>
+              <label htmlFor="custom-height" style={{ fontSize: '0.9em' }}>Or enter custom (mm / in):</label>
               <input
                 id="custom-height"
                 type="number"
@@ -259,6 +330,11 @@ export default function MeasurementsView({
                   color: 'var(--text-color)'
                 }}
               />
+              {referencHeight > 0 && (
+                <div style={{ marginTop: '4px', fontSize: '0.85em', color: 'var(--text-secondary)' }}>
+                  {formatInches(referencHeight)} ({formatFeetInches(referencHeight)})
+                </div>
+              )}
             </div>
           </div>
           <p className="status-pill" style={{
@@ -270,12 +346,61 @@ export default function MeasurementsView({
         </div>
         {modelReady && (
           <div style={{ marginTop: '16px' }}>
-            <CameraCapture 
-              onFrame={handleScanFrame} 
-              landmarks={currentLandmarks}
-              showGuide={true}
-              autoCapture={true}
-            />
+            {/* Mode Selection Buttons */}
+            <div style={{ 
+              display: 'flex', 
+              gap: '12px', 
+              marginBottom: '16px',
+              flexWrap: 'wrap'
+            }}>
+              <button
+                onClick={() => setScanMode('camera')}
+                style={{
+                  padding: '12px 24px',
+                  fontSize: '1em',
+                  fontWeight: scanMode === 'camera' ? 'bold' : 'normal',
+                  background: scanMode === 'camera' ? '#00ff00' : 'var(--input-bg)',
+                  color: scanMode === 'camera' ? '#000' : 'var(--text-color)',
+                  border: '2px solid ' + (scanMode === 'camera' ? '#00ff00' : 'var(--input-border)'),
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+              >
+                📷 Single Frame
+              </button>
+              <button
+                onClick={() => setScanMode('rotation')}
+                style={{
+                  padding: '12px 24px',
+                  fontSize: '1em',
+                  fontWeight: scanMode === 'rotation' ? 'bold' : 'normal',
+                  background: scanMode === 'rotation' ? '#ffaa00' : 'var(--input-bg)',
+                  color: scanMode === 'rotation' ? '#000' : 'var(--text-color)',
+                  border: '2px solid ' + (scanMode === 'rotation' ? '#ffaa00' : 'var(--input-border)'),
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+              >
+                🔄 360° Rotation Scan
+              </button>
+            </div>
+
+            {/* Render appropriate scanner based on mode */}
+            {scanMode === 'camera' ? (
+              <CameraCapture 
+                onFrame={handleScanFrame} 
+                landmarks={currentLandmarks}
+                showGuide={true}
+                autoCapture={true}
+              />
+            ) : (
+              <RotationScan
+                onComplete={handleRotationScanComplete}
+                onCancel={() => setScanMode('camera')}
+              />
+            )}
           </div>
         )}
         {!modelReady && (

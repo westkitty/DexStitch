@@ -3,11 +3,22 @@ import { useState, useEffect } from "react";
 import { estimateMeasurementsFromPose } from "@dexstitch/core";
 import { getPoseEstimator, disposePoseEstimator } from "../ml/poseEstimator";
 import CameraCapture from "../components/CameraCapture";
+import RotationScan from "../components/RotationScan";
+import DualUnitInput from "../components/DualUnitInput";
 export default function MeasurementsView({ measurements, patternSpec, onMeasurementsChange, onPatternSpecChange }) {
+    const mmToIn = (mm) => mm / 25.4;
+    const formatInches = (mm) => `${mmToIn(mm).toFixed(2)} in`;
+    const formatFeetInches = (mm) => {
+        const totalInches = mmToIn(mm);
+        const feet = Math.floor(totalInches / 12);
+        const inches = Math.round(totalInches % 12);
+        return `${feet}'${inches}"`;
+    };
     const [scanStatus, setScanStatus] = useState("Loading ML model...");
     const [referencHeight, setReferenceHeight] = useState(measurements.height);
     const [modelReady, setModelReady] = useState(false);
     const [currentLandmarks, setCurrentLandmarks] = useState([]);
+    const [scanMode, setScanMode] = useState('camera');
     // Initialize pose estimator on component mount
     useEffect(() => {
         const initModel = async () => {
@@ -67,23 +78,78 @@ export default function MeasurementsView({ measurements, patternSpec, onMeasurem
             console.error("Pose estimation error:", error);
         }
     };
-    return (_jsxs("div", { className: "panel", children: [_jsx("h2", { className: "section-title", children: "Measurements" }), _jsxs("div", { className: "form-grid", children: [Object.entries(measurements).map(([key, value]) => (_jsxs("div", { children: [_jsxs("label", { htmlFor: `measurement-${key}`, children: [key, " (mm)"] }), _jsx("input", { id: `measurement-${key}`, type: "number", value: value, onChange: (event) => onMeasurementsChange({ [key]: Number(event.target.value) }) })] }, key))), _jsxs("div", { children: [_jsx("label", { htmlFor: "pattern-ease", children: "ease" }), _jsx("input", { id: "pattern-ease", type: "number", step: "0.1", value: patternSpec.parameters.ease, onChange: (event) => onPatternSpecChange({
+    const handleRotationScanComplete = async (frames) => {
+        if (frames.length === 0) {
+            setScanStatus("No frames captured");
+            return;
+        }
+        try {
+            setScanStatus(`Processing ${frames.length} frames from 360° scan...`);
+            // Average measurements from all frame samples
+            const allEstimates = {};
+            const estimator = getPoseEstimator();
+            for (const frame of frames) {
+                try {
+                    // Get measurements from this frame
+                    const landmarks = frame.landmarks.length > 0 ? frame.landmarks : await estimator.estimatePose(frame.imageData);
+                    if (landmarks.length === 0)
+                        continue;
+                    const estimates = estimateMeasurementsFromPose(landmarks, {
+                        referenceHeight: referencHeight,
+                        minConfidence: 0.5
+                    });
+                    for (const estimate of estimates) {
+                        if (estimate.confidence > 0.5) {
+                            if (!allEstimates[estimate.name]) {
+                                allEstimates[estimate.name] = [];
+                            }
+                            allEstimates[estimate.name].push(estimate.value);
+                        }
+                    }
+                }
+                catch (err) {
+                    console.error("Frame processing error:", err);
+                    continue;
+                }
+            }
+            // Average all measurements
+            const updates = {};
+            const measurementCount = Object.keys(allEstimates).length;
+            for (const [name, values] of Object.entries(allEstimates)) {
+                if (values.length > 0) {
+                    const average = values.reduce((a, b) => a + b, 0) / values.length;
+                    updates[name] = average;
+                }
+            }
+            // Update landmarks with the last frame for visualization
+            setCurrentLandmarks(frames[frames.length - 1].landmarks);
+            setScanStatus(`✓ Complete! Averaged ${measurementCount} measurements from 360° scan`);
+            onMeasurementsChange(updates);
+            // Switch back to camera mode
+            setTimeout(() => setScanMode('camera'), 2000);
+        }
+        catch (error) {
+            setScanStatus(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            console.error("Rotation scan error:", error);
+        }
+    };
+    return (_jsxs("div", { className: "panel", children: [_jsx("h2", { className: "section-title", children: "Measurements" }), _jsxs("div", { className: "form-grid", children: [Object.entries(measurements).map(([key, value]) => (_jsx(DualUnitInput, { id: `measurement-${key}`, label: key, value: value, onChange: (newValue) => onMeasurementsChange({ [key]: newValue }) }, key))), _jsxs("div", { children: [_jsx("label", { htmlFor: "pattern-ease", children: "ease" }), _jsx("input", { id: "pattern-ease", type: "number", step: "0.1", value: patternSpec.parameters.ease, onChange: (event) => onPatternSpecChange({
                                     parameters: {
                                         ...patternSpec.parameters,
                                         ease: Number(event.target.value)
                                     }
-                                }) })] }), _jsxs("div", { children: [_jsx("label", { htmlFor: "pattern-dart", children: "dart depth (mm)" }), _jsx("input", { id: "pattern-dart", type: "number", step: "5", value: patternSpec.parameters.dartDepth || 0, onChange: (event) => onPatternSpecChange({
-                                    parameters: {
-                                        ...patternSpec.parameters,
-                                        dartDepth: Number(event.target.value)
-                                    }
-                                }) })] })] }), _jsxs("div", { style: { marginTop: 20 }, children: [_jsx("h3", { className: "section-title", children: "Body Scanner (AI-Powered Measurements)" }), _jsxs("div", { style: {
+                                }) })] }), _jsx(DualUnitInput, { id: "pattern-dart", label: "dart depth", value: patternSpec.parameters.dartDepth || 0, onChange: (newValue) => onPatternSpecChange({
+                            parameters: {
+                                ...patternSpec.parameters,
+                                dartDepth: newValue
+                            }
+                        }), step: 5 })] }), _jsxs("div", { style: { marginTop: 20 }, children: [_jsx("h3", { className: "section-title", children: "Body Scanner (AI-Powered Measurements)" }), _jsxs("div", { style: {
                             background: 'var(--panel-bg)',
                             border: '2px solid var(--highlight)',
                             borderRadius: '8px',
                             padding: '16px',
                             marginBottom: '16px'
-                        }, children: [_jsx("h4", { style: { margin: '0 0 12px 0', color: 'var(--highlight)' }, children: "\uD83D\uDCF8 How to Use the Scanner:" }), _jsxs("ol", { style: { margin: 0, paddingLeft: '20px', lineHeight: '1.8' }, children: [_jsxs("li", { children: [_jsx("strong", { children: "Enter your height" }), " in millimeters (e.g., 1750mm for 5'9\")"] }), _jsxs("li", { children: [_jsx("strong", { children: "Click \"Start Camera\"" }), " to enable your webcam"] }), _jsxs("li", { children: [_jsx("strong", { children: "Position yourself" }), " in the camera frame:", _jsxs("ul", { style: { marginTop: '8px', marginBottom: '8px' }, children: [_jsx("li", { children: "Stand 6-8 feet from the camera" }), _jsx("li", { children: "Face the camera directly with arms at sides or slightly out" }), _jsx("li", { children: "Ensure your full body is visible from head to feet" }), _jsx("li", { children: "Align yourself with the dotted guide overlay" }), _jsx("li", { children: "Use good lighting - avoid backlighting" })] })] }), _jsxs("li", { children: [_jsx("strong", { children: "Watch for green skeleton" }), " - when it appears, you're being detected"] }), _jsxs("li", { children: [_jsx("strong", { children: "Click \"Capture Frame\"" }), " when positioned correctly"] }), _jsxs("li", { children: [_jsx("strong", { children: "Review measurements" }), " - AI will estimate key body dimensions"] })] }), _jsxs("p", { style: { margin: '12px 0 0 0', color: 'var(--text-secondary)', fontSize: '0.9em' }, children: ["\uD83D\uDCA1 ", _jsx("strong", { children: "Tip:" }), " Wear fitted clothing and capture multiple times for better accuracy. Manual adjustments can be made to any measurement below."] })] }), _jsxs("div", { className: "scan-controls", children: [_jsxs("div", { children: [_jsx("label", { htmlFor: "ref-height", children: "Your Height:" }), _jsxs("select", { id: "ref-height", value: referencHeight, onChange: (e) => setReferenceHeight(Number(e.target.value)), style: {
+                        }, children: [_jsx("h4", { style: { margin: '0 0 12px 0', color: 'var(--highlight)' }, children: "\uD83D\uDCF8 How to Use the Scanner:" }), _jsxs("ol", { style: { margin: 0, paddingLeft: '20px', lineHeight: '1.8' }, children: [_jsxs("li", { children: [_jsx("strong", { children: "Enter your height" }), " in millimeters (e.g., 1750mm / 68.9in)"] }), _jsxs("li", { children: [_jsx("strong", { children: "Click \"Start Camera\"" }), " to enable your webcam"] }), _jsxs("li", { children: [_jsx("strong", { children: "Position yourself" }), " in the camera frame:", _jsxs("ul", { style: { marginTop: '8px', marginBottom: '8px' }, children: [_jsx("li", { children: "Stand 6-8 feet from the camera" }), _jsx("li", { children: "Face the camera directly with arms at sides or slightly out" }), _jsx("li", { children: "Ensure your full body is visible from head to feet" }), _jsx("li", { children: "Align yourself with the dotted guide overlay" }), _jsx("li", { children: "Use good lighting - avoid backlighting" })] })] }), _jsxs("li", { children: [_jsx("strong", { children: "Watch for green skeleton" }), " - when it appears, you're being detected"] }), _jsxs("li", { children: [_jsx("strong", { children: "Click \"Capture Frame\"" }), " when positioned correctly"] }), _jsxs("li", { children: [_jsx("strong", { children: "Review measurements" }), " - AI will estimate key body dimensions"] })] }), _jsxs("p", { style: { margin: '12px 0 0 0', color: 'var(--text-secondary)', fontSize: '0.9em' }, children: ["\uD83D\uDCA1 ", _jsx("strong", { children: "Tip:" }), " Wear fitted clothing and capture multiple times for better accuracy. Manual adjustments can be made to any measurement below."] })] }), _jsxs("div", { className: "scan-controls", children: [_jsxs("div", { children: [_jsx("label", { htmlFor: "ref-height", children: "Your Height (mm / in):" }), _jsxs("select", { id: "ref-height", value: referencHeight, onChange: (e) => setReferenceHeight(Number(e.target.value)), style: {
                                             width: '100%',
                                             padding: '8px 12px',
                                             fontSize: '1rem',
@@ -96,7 +162,7 @@ export default function MeasurementsView({ measurements, patternSpec, onMeasurem
                                             marginTop: '8px',
                                             fontSize: '0.9em',
                                             color: 'var(--text-secondary)'
-                                        }, children: ["Selected: ", referencHeight, "mm", ' ', "(", (referencHeight / 10).toFixed(1), "cm)", ' ', "(", Math.floor(referencHeight / 304.8), "'", Math.round((referencHeight % 304.8) / 25.4), "\")"] })), _jsxs("div", { style: { marginTop: '8px' }, children: [_jsx("label", { htmlFor: "custom-height", style: { fontSize: '0.9em' }, children: "Or enter custom (mm):" }), _jsx("input", { id: "custom-height", type: "number", value: referencHeight, onChange: (e) => setReferenceHeight(Number(e.target.value)), placeholder: "Custom height in mm", style: {
+                                        }, children: ["Selected: ", referencHeight, "mm", ' ', "(", (referencHeight / 10).toFixed(1), "cm)", ' ', "(", formatInches(referencHeight), ")", ' ', "(", formatFeetInches(referencHeight), ")"] })), _jsxs("div", { style: { marginTop: '8px' }, children: [_jsx("label", { htmlFor: "custom-height", style: { fontSize: '0.9em' }, children: "Or enter custom (mm / in):" }), _jsx("input", { id: "custom-height", type: "number", value: referencHeight, onChange: (e) => setReferenceHeight(Number(e.target.value)), placeholder: "Custom height in mm", style: {
                                                     width: '100%',
                                                     padding: '6px 10px',
                                                     marginTop: '4px',
@@ -105,10 +171,35 @@ export default function MeasurementsView({ measurements, patternSpec, onMeasurem
                                                     borderRadius: '6px',
                                                     background: 'var(--input-bg)',
                                                     color: 'var(--text-color)'
-                                                } })] })] }), _jsx("p", { className: "status-pill", style: {
+                                                } }), referencHeight > 0 && (_jsxs("div", { style: { marginTop: '4px', fontSize: '0.85em', color: 'var(--text-secondary)' }, children: [formatInches(referencHeight), " (", formatFeetInches(referencHeight), ")"] }))] })] }), _jsx("p", { className: "status-pill", style: {
                                     backgroundColor: modelReady ? '#90EE90' : '#FFD700',
                                     color: '#000'
-                                }, children: scanStatus })] }), modelReady && (_jsx("div", { style: { marginTop: '16px' }, children: _jsx(CameraCapture, { onFrame: handleScanFrame, landmarks: currentLandmarks, showGuide: true, autoCapture: true }) })), !modelReady && (_jsxs("div", { style: {
+                                }, children: scanStatus })] }), modelReady && (_jsxs("div", { style: { marginTop: '16px' }, children: [_jsxs("div", { style: {
+                                    display: 'flex',
+                                    gap: '12px',
+                                    marginBottom: '16px',
+                                    flexWrap: 'wrap'
+                                }, children: [_jsx("button", { onClick: () => setScanMode('camera'), style: {
+                                            padding: '12px 24px',
+                                            fontSize: '1em',
+                                            fontWeight: scanMode === 'camera' ? 'bold' : 'normal',
+                                            background: scanMode === 'camera' ? '#00ff00' : 'var(--input-bg)',
+                                            color: scanMode === 'camera' ? '#000' : 'var(--text-color)',
+                                            border: '2px solid ' + (scanMode === 'camera' ? '#00ff00' : 'var(--input-border)'),
+                                            borderRadius: '6px',
+                                            cursor: 'pointer',
+                                            transition: 'all 0.2s'
+                                        }, children: "\uD83D\uDCF7 Single Frame" }), _jsx("button", { onClick: () => setScanMode('rotation'), style: {
+                                            padding: '12px 24px',
+                                            fontSize: '1em',
+                                            fontWeight: scanMode === 'rotation' ? 'bold' : 'normal',
+                                            background: scanMode === 'rotation' ? '#ffaa00' : 'var(--input-bg)',
+                                            color: scanMode === 'rotation' ? '#000' : 'var(--text-color)',
+                                            border: '2px solid ' + (scanMode === 'rotation' ? '#ffaa00' : 'var(--input-border)'),
+                                            borderRadius: '6px',
+                                            cursor: 'pointer',
+                                            transition: 'all 0.2s'
+                                        }, children: "\uD83D\uDD04 360\u00B0 Rotation Scan" })] }), scanMode === 'camera' ? (_jsx(CameraCapture, { onFrame: handleScanFrame, landmarks: currentLandmarks, showGuide: true, autoCapture: true })) : (_jsx(RotationScan, { onComplete: handleRotationScanComplete, onCancel: () => setScanMode('camera') }))] })), !modelReady && (_jsxs("div", { style: {
                             textAlign: 'center',
                             padding: '40px',
                             background: 'var(--input-bg)',

@@ -1,5 +1,5 @@
 import { jsxs as _jsxs, jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 export default function CameraCapture({ onFrame, landmarks, showGuide = true, autoCapture = false }) {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
@@ -8,6 +8,7 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true, au
     const [poseQuality, setPoseQuality] = useState('none');
     const [countdown, setCountdown] = useState(null);
     const [captureSuccess, setCaptureSuccess] = useState(false);
+    const [distance, setDistance] = useState('too-far');
     const animationRef = useRef();
     const countdownRef = useRef();
     const lastCaptureRef = useRef(0);
@@ -25,8 +26,10 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true, au
             const nextStream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     facingMode: "user",
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 }
+                    // Force portrait aspect ratio
+                    width: { ideal: 720, max: 1080 },
+                    height: { ideal: 1280, max: 1920 },
+                    aspectRatio: { ideal: 0.5625 } // 9:16 portrait
                 }
             });
             setStream(nextStream);
@@ -36,7 +39,7 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true, au
                 await new Promise((resolve) => {
                     if (videoRef.current) {
                         videoRef.current.onloadedmetadata = () => {
-                            videoRef.current?.play();
+                            void videoRef.current?.play();
                             resolve();
                         };
                     }
@@ -73,7 +76,7 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true, au
             console.error("Error stopping camera:", err);
         }
     };
-    const captureFrame = () => {
+    const captureFrame = useCallback(() => {
         const video = videoRef.current;
         if (!video || !video.videoWidth) {
             setError("Video not ready. Please wait a moment.");
@@ -100,15 +103,36 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true, au
             console.error("Capture error:", err);
             setError("Failed to capture frame");
         }
-    };
+    }, [onFrame]);
+    // Calculate distance from camera based on shoulder width
+    const calculateDistance = useCallback((lm) => {
+        if (!lm || lm.length === 0)
+            return 'too-far';
+        // Use shoulder width as distance indicator (wider = closer)
+        const leftShoulder = lm[11];
+        const rightShoulder = lm[12];
+        if (!leftShoulder || !rightShoulder)
+            return 'too-far';
+        const shoulderWidth = Math.abs(leftShoulder.x - rightShoulder.x);
+        // Optimal range: shoulders take up 25-45% of frame width
+        if (shoulderWidth < 0.20)
+            return 'too-far';
+        if (shoulderWidth > 0.50)
+            return 'too-close';
+        return 'optimal';
+    }, []);
     // Assess pose quality based on landmarks
-    const assessPoseQuality = (lm) => {
+    const assessPoseQuality = useCallback((lm) => {
         if (!lm || lm.length === 0)
             return 'none';
         // Check confidence of key landmarks
         const keyPoints = [0, 11, 12, 23, 24]; // nose, shoulders, hips
         const visibleKeyPoints = keyPoints.filter(i => lm[i] && (lm[i].visibility ?? 1) > 0.5);
         if (visibleKeyPoints.length < 3)
+            return 'poor';
+        // Check distance
+        const dist = calculateDistance(lm);
+        if (dist !== 'optimal')
             return 'poor';
         // Check if body is centered
         if (lm[0]) { // nose
@@ -125,12 +149,14 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true, au
             }
         }
         return 'poor';
-    };
-    // Update pose quality whenever landmarks change
+    }, [calculateDistance]);
+    // Update pose quality and distance whenever landmarks change
     useEffect(() => {
         const quality = assessPoseQuality(landmarks);
         setPoseQuality(quality);
-    }, [landmarks]);
+        const dist = calculateDistance(landmarks);
+        setDistance(dist);
+    }, [landmarks, assessPoseQuality, calculateDistance]);
     // Auto-capture when pose is excellent
     useEffect(() => {
         if (!autoCapture || !stream || poseQuality !== 'excellent' || countdown !== null) {
@@ -160,7 +186,7 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true, au
                 clearInterval(countdownRef.current);
             }
         };
-    }, [poseQuality, autoCapture, stream, countdown]);
+    }, [poseQuality, autoCapture, stream, countdown, captureFrame]);
     // Cancel countdown if pose degrades
     useEffect(() => {
         if (poseQuality !== 'excellent' && countdown !== null && countdownRef.current) {
@@ -184,8 +210,11 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true, au
                 canvas.width = video.videoWidth || 640;
                 canvas.height = video.videoHeight || 480;
             }
-            // Draw video frame in GRAYSCALE
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            // MIRROR the video feed horizontally (natural selfie view)
+            ctx.save();
+            ctx.scale(-1, 1);
+            ctx.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
+            ctx.restore();
             // Apply grayscale filter
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             const data = imageData.data;
@@ -196,40 +225,79 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true, au
                 data[i + 2] = gray;
             }
             ctx.putImageData(imageData, 0, 0);
-            // Draw HIGH-CONTRAST guide overlay
+            // Draw ADAPTIVE guide overlay that scales with detected pose
             if (showGuide) {
                 const quality = assessPoseQuality(landmarks);
+                const dist = calculateDistance(landmarks);
                 const guideColor = quality === 'excellent' ? '#00ff00' : quality === 'good' ? '#ffaa00' : '#ff4444';
                 ctx.strokeStyle = guideColor;
                 ctx.lineWidth = 6;
                 ctx.setLineDash([15, 10]);
                 ctx.shadowColor = 'rgba(0,0,0,0.8)';
                 ctx.shadowBlur = 10;
-                // Draw body outline guide - MUCH MORE OBVIOUS
-                const centerX = canvas.width / 2;
-                const bodyTop = canvas.height * 0.08;
-                const bodyBottom = canvas.height * 0.92;
-                const bodyWidth = canvas.width * 0.25;
-                ctx.beginPath();
-                // Head - larger and more visible
-                ctx.arc(centerX, bodyTop + 40, 35, 0, Math.PI * 2);
-                // Shoulders
-                ctx.moveTo(centerX - 60, bodyTop + 100);
-                ctx.lineTo(centerX + 60, bodyTop + 100);
-                // Body outline
-                ctx.moveTo(centerX, bodyTop + 75);
-                ctx.lineTo(centerX, bodyBottom - 180);
-                // Arms - extended
-                ctx.moveTo(centerX - bodyWidth / 2 - 20, bodyTop + 150);
-                ctx.lineTo(centerX - 60, bodyTop + 100);
-                ctx.moveTo(centerX + bodyWidth / 2 + 20, bodyTop + 150);
-                ctx.lineTo(centerX + 60, bodyTop + 100);
-                // Legs
-                ctx.moveTo(centerX, bodyBottom - 180);
-                ctx.lineTo(centerX - 50, bodyBottom - 20);
-                ctx.moveTo(centerX, bodyBottom - 180);
-                ctx.lineTo(centerX + 50, bodyBottom - 20);
-                ctx.stroke();
+                // If we have landmarks and distance is optimal, overlay guide ON the detected pose
+                if (landmarks && landmarks.length > 0 && dist === 'optimal') {
+                    // Draw guide aligned with actual pose position
+                    const nose = landmarks[0];
+                    const leftShoulder = landmarks[11];
+                    const rightShoulder = landmarks[12];
+                    const leftHip = landmarks[23];
+                    const rightHip = landmarks[24];
+                    if (nose && leftShoulder && rightShoulder && leftHip && rightHip) {
+                        const centerX = ((leftShoulder.x + rightShoulder.x) / 2) * canvas.width;
+                        const centerY = ((leftShoulder.y + rightShoulder.y) / 2) * canvas.height;
+                        const hipCenterY = ((leftHip.y + rightHip.y) / 2) * canvas.height;
+                        const shoulderWidth = Math.abs(leftShoulder.x - rightShoulder.x) * canvas.width;
+                        ctx.beginPath();
+                        // Head circle at nose position
+                        ctx.arc(nose.x * canvas.width, nose.y * canvas.height, shoulderWidth * 0.35, 0, Math.PI * 2);
+                        // Shoulders
+                        ctx.moveTo(leftShoulder.x * canvas.width, leftShoulder.y * canvas.height);
+                        ctx.lineTo(rightShoulder.x * canvas.width, rightShoulder.y * canvas.height);
+                        // Body
+                        ctx.moveTo(centerX, centerY);
+                        ctx.lineTo(centerX, hipCenterY);
+                        // Arms
+                        ctx.moveTo(leftShoulder.x * canvas.width - shoulderWidth * 0.4, centerY + shoulderWidth * 0.5);
+                        ctx.lineTo(leftShoulder.x * canvas.width, leftShoulder.y * canvas.height);
+                        ctx.moveTo(rightShoulder.x * canvas.width + shoulderWidth * 0.4, centerY + shoulderWidth * 0.5);
+                        ctx.lineTo(rightShoulder.x * canvas.width, rightShoulder.y * canvas.height);
+                        // Legs
+                        const legSpread = shoulderWidth * 0.6;
+                        ctx.moveTo(centerX, hipCenterY);
+                        ctx.lineTo(centerX - legSpread / 2, hipCenterY + (canvas.height - hipCenterY) * 0.8);
+                        ctx.moveTo(centerX, hipCenterY);
+                        ctx.lineTo(centerX + legSpread / 2, hipCenterY + (canvas.height - hipCenterY) * 0.8);
+                        ctx.stroke();
+                    }
+                }
+                else {
+                    // Draw static guide in center (when no pose or wrong distance)
+                    const centerX = canvas.width / 2;
+                    const bodyTop = canvas.height * 0.08;
+                    const bodyBottom = canvas.height * 0.92;
+                    const bodyWidth = canvas.width * 0.25;
+                    ctx.beginPath();
+                    // Head
+                    ctx.arc(centerX, bodyTop + 40, 35, 0, Math.PI * 2);
+                    // Shoulders
+                    ctx.moveTo(centerX - 60, bodyTop + 100);
+                    ctx.lineTo(centerX + 60, bodyTop + 100);
+                    // Body outline
+                    ctx.moveTo(centerX, bodyTop + 75);
+                    ctx.lineTo(centerX, bodyBottom - 180);
+                    // Arms
+                    ctx.moveTo(centerX - bodyWidth / 2 - 20, bodyTop + 150);
+                    ctx.lineTo(centerX - 60, bodyTop + 100);
+                    ctx.moveTo(centerX + bodyWidth / 2 + 20, bodyTop + 150);
+                    ctx.lineTo(centerX + 60, bodyTop + 100);
+                    // Legs
+                    ctx.moveTo(centerX, bodyBottom - 180);
+                    ctx.lineTo(centerX - 50, bodyBottom - 20);
+                    ctx.moveTo(centerX, bodyBottom - 180);
+                    ctx.lineTo(centerX + 50, bodyBottom - 20);
+                    ctx.stroke();
+                }
                 ctx.setLineDash([]);
                 ctx.shadowBlur = 0;
                 // Draw alignment box
@@ -290,7 +358,7 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true, au
                 cancelAnimationFrame(animationRef.current);
             }
         };
-    }, [stream, landmarks, showGuide]);
+    }, [stream, landmarks, showGuide, assessPoseQuality, calculateDistance]);
     return (_jsxs("div", { style: { position: 'relative' }, children: [error && (_jsxs("div", { style: {
                     padding: '16px',
                     marginBottom: '12px',
@@ -334,7 +402,7 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true, au
                                     zIndex: 10,
                                     textAlign: 'center',
                                     minWidth: '200px'
-                                }, children: [poseQuality === 'none' && '❓ No Pose Detected', poseQuality === 'poor' && '⚠️ Adjust Position', poseQuality === 'good' && '👍 Almost There', poseQuality === 'excellent' && countdown === null && '✓ PERFECT - HOLD STILL'] }), countdown !== null && (_jsx("div", { style: {
+                                }, children: [poseQuality === 'none' && (distance === 'too-far' ? '👋 Come Closer!' : distance === 'too-close' ? '🔙 Step Back!' : '❓ No Pose Detected'), poseQuality === 'poor' && (distance === 'too-far' ? '👋 Move Closer to Camera' : distance === 'too-close' ? '🔙 Step Back a Bit' : '⚠️ Center Yourself in Frame'), poseQuality === 'good' && '👍 Almost Perfect - Hold Still', poseQuality === 'excellent' && countdown === null && '✓ PERFECT - HOLD STILL'] }), countdown !== null && (_jsx("div", { style: {
                                     position: 'absolute',
                                     top: '50%',
                                     left: '50%',
@@ -389,9 +457,13 @@ export default function CameraCapture({ onFrame, landmarks, showGuide = true, au
                                     maxWidth: '90%'
                                 }, children: autoCapture
                                     ? poseQuality === 'excellent' && countdown === null
-                                        ? '🎯 Hold still - Auto-capture in 3 seconds...'
-                                        : '📐 Stand in the center, face camera, full body visible'
-                                    : '📷 Click "Capture Frame" when positioned correctly' })] }))] }), _jsxs("div", { style: { display: "flex", gap: 8, flexWrap: "wrap", marginTop: '16px' }, children: [_jsx("button", { className: "primary", type: "button", onClick: startCamera, disabled: !!stream, style: {
+                                        ? '🎯 Perfect! Hold still...'
+                                        : distance === 'too-far'
+                                            ? '📐 Move closer until the guide matches your body'
+                                            : distance === 'too-close'
+                                                ? '📐 Step back until your full body is visible'
+                                                : '📐 Align yourself with the guide overlay'
+                                    : '📷 Position yourself and click "Capture Frame"' })] }))] }), _jsxs("div", { style: { display: "flex", gap: 8, flexWrap: "wrap", marginTop: '16px' }, children: [_jsx("button", { className: "primary", type: "button", onClick: startCamera, disabled: !!stream, style: {
                             cursor: stream ? 'not-allowed' : 'pointer',
                             opacity: stream ? 0.6 : 1
                         }, children: stream ? '✓ Camera Active' : 'Start Camera' }), _jsx("button", { className: "primary", type: "button", onClick: captureFrame, disabled: !stream, style: {

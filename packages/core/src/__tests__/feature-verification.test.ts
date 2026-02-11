@@ -5,13 +5,13 @@
  * Systematically tests all 10 core features to ensure they are fully implemented and working.
  */
 
-import { describe, test, expect, beforeAll } from 'vitest';
+import { describe, test, expect } from 'vitest';
 import * as core from '@dexstitch/core';
 import type { MeasurementSet, PatternSpec, Point2D, EmbroideryProgram } from '@dexstitch/types';
 
 // Polyfill ImageData for Node.js
 if (typeof ImageData === 'undefined') {
-  global.ImageData = class ImageData {
+  globalThis.ImageData = class ImageData {
     data: Uint8ClampedArray;
     width: number;
     height: number;
@@ -26,7 +26,7 @@ if (typeof ImageData === 'undefined') {
         this.data = new Uint8ClampedArray(this.width * this.height * 4);
       }
     }
-  } as any;
+  } as typeof ImageData;
 }
 
 describe('DexStitch Feature Verification - All 10 Features', () => {
@@ -377,7 +377,7 @@ describe('DexStitch Feature Verification - All 10 Features', () => {
         id: 'test-plugin',
         name: 'Test Plugin',
         version: '1.0.0',
-        generate: async (measurements, spec) => ({
+        generate: async (_measurements, _spec) => ({
           pieces: [{
             id: 'test-piece',
             name: 'Test Piece',
@@ -401,7 +401,7 @@ describe('DexStitch Feature Verification - All 10 Features', () => {
         name: 'Test Export',
         fileExtension: '.test',
         mimeType: 'application/test',
-        export: async (pattern) => 'test data'
+        export: async (_pattern) => 'test data'
       };
       
       expect(() => registry.registerExportPlugin(plugin)).not.toThrow();

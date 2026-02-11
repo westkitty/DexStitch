@@ -5,7 +5,7 @@ import type { MeasurementSet, PatternSpec, PatternResult } from '@dexstitch/type
 
 // Polyfill ImageData for Node.js test environment
 if (typeof ImageData === 'undefined') {
-  global.ImageData = class ImageData {
+  globalThis.ImageData = class ImageData {
     data: Uint8ClampedArray;
     width: number;
     height: number;
@@ -21,7 +21,7 @@ if (typeof ImageData === 'undefined') {
         this.data = new Uint8ClampedArray(this.width * this.height * 4);
       }
     }
-  } as any;
+  } as typeof ImageData;
 }
 
 describe('Plugin System', () => {
@@ -37,7 +37,7 @@ describe('Plugin System', () => {
         id: 'test-pattern',
         name: 'Test Pattern Plugin',
         version: '1.0.0',
-        generate: async (measurements: MeasurementSet, spec: PatternSpec): Promise<PatternResult> => {
+        generate: async (_measurements: MeasurementSet, _spec: PatternSpec): Promise<PatternResult> => {
           return {
             pieces: [
               {
@@ -113,7 +113,7 @@ describe('Plugin System', () => {
         const validatingPlugin: PatternPlugin = {
           ...testPatternPlugin,
           id: 'validating-plugin',
-          validate: (measurements, spec) => {
+          validate: (measurements, _spec) => {
             const errors: string[] = [];
             if (measurements.height < 1000) errors.push('Height too small');
             return errors;
@@ -211,7 +211,7 @@ describe('Plugin System', () => {
       const testEmbroideryPlugin: EmbroideryPlugin = {
         id: 'test-embroidery',
         name: 'Test Embroidery Plugin',
-        generateStitches: async (imageData: ImageData) => {
+        generateStitches: async (_imageData: ImageData) => {
           return {
             stitches: [
               { x: 0, y: 0, command: 'jump' },
