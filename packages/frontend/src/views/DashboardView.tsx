@@ -6,12 +6,12 @@ export function DashboardView() {
     <div className="dashboard-view">
       <div className="dashboard-hero">
         <img
-          src="/DexStitchBanner.jpg"
+          src={`${import.meta.env.BASE_URL}DexStitchBanner.jpg`}
           alt="DexStitch Banner"
           className="dashboard-banner"
           onError={(e) => {
             console.error('Banner failed to load:', e);
-            e.currentTarget.src = '/DexStitchLogo.png';
+            e.currentTarget.src = `${import.meta.env.BASE_URL}DexStitchLogo.png`;
           }}
           onLoad={() => console.log('Banner loaded successfully')}
         />

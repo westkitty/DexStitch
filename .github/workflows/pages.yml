@@ -1,0 +1,86 @@
+name: Deploy DexStitch to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type-check workspace
+        run: pnpm typecheck
+
+      - name: Build the frontend and workspace packages
+        run: pnpm build
+        env:
+          DEXSTITCH_BASE_PATH: /DexStitch/
+          VITE_ENABLE_COLLAB: "false"
+
+      - name: Verify the deployable output
+        shell: bash
+        run: |
+          set -euo pipefail
+          dist=packages/frontend/dist
+          test -f "$dist/index.html"
+          test -f "$dist/manifest.webmanifest"
+          test -f "$dist/sw.js"
+          test -f "$dist/DexStitchLogo.png"
+          test -f "$dist/DexStitchBanner.jpg"
+          test -f "$dist/icons/icon-192.svg"
+          test -f "$dist/icons/icon-512.svg"
+          grep -q '/DexStitch/assets/' "$dist/index.html"
+          grep -q '/DexStitch/manifest.webmanifest' "$dist/index.html"
+          node -e "const fs=require('node:fs');const m=JSON.parse(fs.readFileSync('packages/frontend/dist/manifest.webmanifest','utf8'));if(m.start_url!== './'||m.scope!== './'||m.icons.some(i=>i.src.startsWith('/')))process.exit(1);"
+          if grep -qE '(src|href)="/(assets|manifest\.webmanifest|icons)/' "$dist/index.html"; then
+            echo "Found root-relative asset URLs; Pages must use /DexStitch/." >&2
+            exit 1
+          fi
+          echo "Pages base paths, manifest scope, icons, and service worker verified."
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: packages/frontend/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

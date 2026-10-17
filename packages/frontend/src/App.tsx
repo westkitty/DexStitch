@@ -173,7 +173,7 @@ function AppShell() {
         <ThemeToggle />
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <img 
-            src="/DexStitchLogo.png" 
+            src={`${import.meta.env.BASE_URL}DexStitchLogo.png`} 
             alt="DexStitch Logo" 
             style={{ height: '60px', width: 'auto' }}
           />
